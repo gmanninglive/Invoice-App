@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply w-full h-screen flex justify-center;
+  }
+  h1 {@apply font-bold;
+  }
+
+  body {
+    @apply antialiased text-gray-900 bg-gray-100;
+  }
+  input{
+    @apply p-2;
+  }
+}
+@layer components {
+  .page {
+    width: 210mm;
+    height: 297mm;
+  }
+  .page-wrapper{
+    @apply antialiased text-gray-900 bg-gray-100 flex items-center justify-center relative;
+  }
+  .label{
+    @apply mt-2;
+  }
+  
+}
