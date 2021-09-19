@@ -1,34 +1,37 @@
 import { ObjectId } from "bson";
 import { useRouter } from "next/router";
-import { BiPyramid } from "react-icons/bi";
-import LineItem from "./LineItem";
 
-export default function NewInvoice(props){
-    const router = useRouter();
+import { Formik, Form, Field, FieldArray } from "formik";
+import { HiPlus, HiMinus } from "react-icons/hi";
 
-    const url = props.url;
-    const inv_id = ObjectId();
-    const { customers } = props;
+import { formatPrice, subtotalSum, vatSum } from "../../utils/format";
+import { DatePicker } from "../common/DatePicker";
 
+// TODO Add subtotal / vat / total calculator with onchange from form
+export default function NewInvoice({ url, customers, inv_no }) {
+  const router = useRouter();
+  const inv_id = ObjectId();
 
-    async function handleSubmit(e) {
-    e.preventDefault();
+  async function handleSubmit(values) {
+    let subtotal = formatPrice(subtotalSum(values.line_items));
+    let vat = formatPrice(vatSum(values.line_items));
+    let total = formatPrice(
+      subtotalSum(values.line_items) + vatSum(values.line_items)
+    );
 
-    console.log(e.target.description.value);
-    const body =
-        {
-            inv_id: inv_id,
-            cust_id: e.target.customer.value.slice(0, 24),
-            cust_name: e.target.customer.value.slice(24),
-            line_items: 
-            [{
-              line_name: e.target.line_name.value,
-              description: e.target.description.value,
-              price: e.target.price.value,
-              quantity: e.target.quantity.value,
-              vat: e.target.vat.value,
-            }],
-        };
+    const body = {
+      inv_id: inv_id,
+      inv_no: values.inv_no,
+      inv_date: values.inv_date,
+      due_date: values.due_date,
+      cust_id: JSON.parse(values.customer).cust_id,
+      customer: JSON.parse(values.customer),
+      line_items: values.line_items,
+      notes: values.notes,
+      sub_total: subtotal,
+      vat_total: vat,
+      total_due: total,
+    };
 
     const res = await fetch(`/api/invoices/${url}`, {
       method: "PUT",
@@ -38,25 +41,219 @@ export default function NewInvoice(props){
     if (res.ok) router.back();
   }
 
-  return (
-    <>
-      <form className="grid grid-cols-1" onSubmit={handleSubmit}>
-      <label className="label" htmlFor="customer">Customer</label>
-      <select name="customer">
-         {customers.map(customer => {
-           return (
-             <option key={customer.cust_id} value={`${customer.cust_id}${customer.first_name} ${customer.sur_name}`}> {customer.first_name} {customer.sur_name} </option>
-           )
-         })}
-    </select>
-  
-        <LineItem />
-        
+  let dateToday = new Date();
+  let dateDue = new Date().setDate(dateToday.getDate() + 7);
 
-        <button type="submit" className="rounded-xl border-2 py-2 px-4 hover:bg-gray-200 ease-in-out">
-          Save
-        </button>
-      </form>
-    </>
-  )
-  }
+  return (
+    <div>
+      <Formik
+        initialValues={{
+          customer: {
+            cust_id: "",
+            first_name: "",
+            sur_name: "",
+            add_l1: "",
+            add_l2: "",
+            add_l3: "",
+            add_l4: "",
+            postcode: "",
+            email: "",
+            landline: "",
+            mobile: "",
+          },
+          inv_date: dateToday,
+          due_date: dateDue,
+          inv_no: inv_no,
+          line_items: [
+            {
+              line_name: "",
+              description: "",
+              price: 0.0,
+              quantity: 1,
+              vat: 0.2,
+            },
+          ],
+
+          nots: "",
+          sub_total: 0,
+          vat_total: 0,
+          total_due: 0,
+        }}
+        onSubmit={(values) => {
+          handleSubmit(values);
+        }}
+      >
+        {({ values }) => (
+          
+          <Form className="grid grid-cols-1 mt-6">
+            <div className="border-2 rounded-md p-4" >
+              <div className="grid">
+            {/* Customer Select */}
+            <label className="label" htmlFor="customer">
+              Customer
+            </label>
+            <Field component="select" name="customer">
+              <option value="" />
+              {customers.map((customer) => {
+                return (
+                  <option
+                    key={customer.cust_id}
+                    value={JSON.stringify(customer)}
+                  >
+                    {" "}
+                    {customer.first_name} {customer.sur_name}{" "}
+                  </option>
+                );
+              })}
+            </Field>
+            </div>
+            <div className="flex justify-start gap-x-2 my-2">
+              <DatePicker name="inv_date" label="Select the Invoice Date" />
+              <DatePicker name="due_date" label="Select the Date Due" />
+              <div className="grid">
+                <label className="" htmlFor="inv_no">
+                  Set Invoice Number
+                </label>
+                <Field name="inv_no" type="number" className="rounded-md" />
+              </div>
+            </div>
+            </div>
+            <FieldArray // Line Items Array
+              name="line_items"
+              render={(arrayHelpers) => (
+                <div>
+                  {values.line_items && values.line_items.length > 0 ? (
+                    values.line_items.map((line_item, index) => (
+                      <div
+                        className="border-2 rounded-md my-4 relative "
+                        key={index}
+                      >
+                        <div className="flex justify-between flex-grow">
+                          <div className="col-span-1 w-1/2">
+                            <label
+                              className="label m-4 w-1/2"
+                              htmlFor={`line_items.${index}.line_name`}
+                            >
+                              Line Item Name
+                            </label>
+                            <Field
+                              name={`line_items.${index}.line_name`}
+                              type="text"
+                              className="m-4 rounded-md"
+                            />
+                            <br />
+                            <label
+                              className="label m-4"
+                              htmlFor={`line_items.${index}.description`}
+                            >
+                              Description
+                            </label>
+                            <Field
+                              name={`line_items.${index}.description`}
+                              component="textarea"
+                              className="w-full ml-4 my-4 p-2 rounded-md"
+                            />
+                          </div>
+
+                          <div className="m-4 flex justify-around flex-wrap w-1/2">
+                            <span>
+                              <label
+                                className="label "
+                                htmlFor={`line_items.${index}.price`}
+                              >
+                                Price
+                              </label>
+
+                              <Field
+                                name={`line_items.${index}.price`}
+                                type="number"
+                                className="h-10 w-20 mx-2 rounded-md"
+                              />
+                            </span>
+                            <span>
+                              <label
+                                className="label w-16"
+                                htmlFor={`line_items.${index}.quantity`}
+                              >
+                                Quantity
+                              </label>
+                              <Field
+                                name={`line_items.${index}.quantity`}
+                                type="number"
+                                className="h-10 w-16 mx-2 rounded-md"
+                              />
+                            </span>
+                            <span>
+                              <label
+                                className="label "
+                                htmlFor={`line_items.${index}.vat`}
+                              >
+                                VAT
+                              </label>
+                              <Field
+                                name={`line_items.${index}.vat`}
+                                component="select"
+                                className="h-10 w-16 mx-2 rounded-md"
+                              >
+                                <option value={0}>0%</option>
+                                <option value={0.05}>5%</option>
+                                <option value={0.2}>20%</option>
+                              </Field>
+                            </span>
+                            <div className="absolute bottom-2 right-2">
+                              <button
+                                type="button"
+                                className="text-gray-600 "
+                                onClick={() => arrayHelpers.remove(index)} // Remove a line item from the list
+                              >
+                                <HiMinus size={32} />
+                              </button>
+                              <button
+                                type="button"
+                                className="text-blue-600"
+                                onClick={() => arrayHelpers.insert(index, "")} // Insert an empty line_item object at a position
+                              >
+                                <HiPlus size={32} />
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <button
+                      type="button"
+                      className=" inline-flex items-center text-white bg-green-500 rounded-xl border-2 my-4 px-4 hover:bg-green-800 ease-in-out"
+                      onClick={() => arrayHelpers.push("")}
+                    >
+                      {/* Show this when user has removed all line items from the list */}
+                      <p className="py-2">Add a Line Item </p>
+                      <HiPlus size={36} />
+                    </button>
+                  )}
+                  <div className="border-2 rounded-md p-4 my-4 grid" >
+                  <label className="" htmlFor="notes">
+                      Notes
+                    </label>
+                    <Field className="w-1/2 p-2" name="notes" component="textarea" placeholder="Enter any notes to be displayed in the footer" />
+                  
+                    </div>
+                    
+                  <div>
+                    
+                    <button
+                      type="submit"
+                      className="rounded-xl border-2 py-2 px-4 text-white bg-blue-600 hover:bg-blue-900 ease-in-out"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              )}
+            />
+          </Form>
+        )}
+      </Formik>
+    </div>
+  );
+}

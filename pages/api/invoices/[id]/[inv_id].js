@@ -1,4 +1,4 @@
-import { connectToDatabase } from "../../../../lib/mongodb";
+import { connectToDatabase } from "../../../../db/mongodb";
 
 // const mongodb = require("mongodb");
 import { ObjectId } from 'mongodb';

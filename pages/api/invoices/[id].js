@@ -1,15 +1,13 @@
-import { connectToDatabase } from "../../../lib/mongodb";
+import { connectToDatabase } from "../../../db/mongodb";
 
-// const mongodb = require("mongodb");
-import { ObjectId } from "mongodb";
+import { ObjectId } from "bson";
 
-// TODO check if ObjectId required for new users
 export default async function handler(req, res) {
   const { method } = req;
 
   const { db } = await connectToDatabase();
 
-  // switch the methods
+  // Switch the methods
   switch (method) {
     case "GET": {
       

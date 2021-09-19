@@ -3,10 +3,9 @@ import { useUser } from "@auth0/nextjs-auth0";
 
 import { ObjectId } from "bson";
 
-import { connectToDatabase } from "../../../lib/mongodb";
+import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
 
-import projection from "../../../utils/projection.json";
 import EditCustomer from "../../../components/forms/EditCustomer";
 
 const CustomerDetails = (props) => {
@@ -26,20 +25,16 @@ const CustomerDetails = (props) => {
   }
 
   return (
-    <div className="w-screen flex justify-end">
-      <SideBar
-        user={user}
-        id={id}
-        business_name={business_name}
-      />
-      <button
-        className="absolute top-6 right-6 mx-auto rounded-xl border-2 py-2 px-4"
-        type="button"
-        onClick={() => router.back()}
-      >
-        Back
-      </button>
-      <div className="w-3/4 my-12 pr-40 grid">
+    <div className="w-screen flex justify-center">
+      <SideBar user={user} id={id} business_name={business_name} />
+      <div className="w-full sm:w-7/12 my-8 grid relative">
+        <button
+          className="absolute top-0 right-0 mx-auto rounded-xl border-2 py-2 px-4"
+          type="button"
+          onClick={() => router.back()}
+        >
+          Back
+        </button>
         <div className="flex items-center"></div>
         <h1>Edit Customer</h1>
         <EditCustomer customers={customers} url={`${id}/${cust_id}`} />

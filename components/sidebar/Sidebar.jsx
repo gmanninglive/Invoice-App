@@ -29,7 +29,7 @@ export default function SideBar({ user, id, business_name }) {
         <div className="flex-col justify-center items-center p-6">
           <div>
             <div className="flex justify-between mt-6">
-              {business_name && <h1>{business_name}</h1>}
+              {business_name && <h3>{business_name}</h3>}
               <Image
                 src={user.picture}
                 alt="user profile picture"

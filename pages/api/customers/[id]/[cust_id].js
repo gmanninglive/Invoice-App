@@ -1,10 +1,8 @@
-import { connectToDatabase } from "../../../../lib/mongodb";
-
-// const mongodb = require("mongodb");
-import { ObjectId } from 'mongodb';
+import { connectToDatabase } from "../../../../db/mongodb";
 
 
-// TODO check if ObjectId required for new users
+import { ObjectId } from 'bson';
+
 export default async function handler(req, res) {
   const {
     method,

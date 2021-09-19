@@ -3,7 +3,7 @@ import { useUser } from "@auth0/nextjs-auth0";
 
 import { ObjectId } from "bson";
 
-import { connectToDatabase } from "../../../lib/mongodb";
+import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
 import projection from "../../../utils/projection.json";
 import NewInvoice from "../../../components/forms/NewInvoice";
@@ -12,8 +12,12 @@ const CustomerDetails = (props) => {
   const { user, isLoading } = useUser();
   const router = useRouter();
   const { id } = router.query;
-  const { customers } = props.properties[0];
+  const { customers, invoices } = props.properties[0];
   const { business_name } = props.properties[0].business;
+
+  let newInvNo = invoices[0].inv_no + 1;
+  console.log(props);
+
 
   if (!user) {
     return (
@@ -22,13 +26,14 @@ const CustomerDetails = (props) => {
       </div>
     );
   }
+  
 
   return (
-    <div className="w-screen flex justify-end">
+    <div className="w-screen flex justify-center">
       <SideBar user={user} id={id} business_name={business_name} />
-      <div className="w-3/4 my-6 pr-40 grid">
+      <div className="w-full sm:w-7/12 my-8 grid relative">
         <button
-          className="absolute top-6 right-6 mx-auto rounded-xl border-2 py-2 px-4"
+          className="absolute top-0 right-0 mx-auto rounded-xl border-2 py-2 px-4"
           type="button"
           onClick={() => router.back()}
         >
@@ -36,7 +41,7 @@ const CustomerDetails = (props) => {
         </button>
         
         <h1>Add New Invoice</h1>
-        <NewInvoice url={id} customers={customers} />
+        <NewInvoice url={id} customers={customers} inv_no={newInvNo} />
       </div>
     </div>
   );
@@ -49,11 +54,26 @@ export async function getServerSideProps(context) {
   const { id } = context.query;
 
   const data = await db
-    .collection("users")
-    .find({ _id: ObjectId(id) })
-    .project(projection)
-    .toArray();
-
+  .collection("users")
+  .aggregate([
+    {
+      $match: { _id: ObjectId(id) },
+    },
+    {
+      $project: {
+        business: 1,
+        customers: 1,
+        invoices: {
+          $filter: {
+            input: "$invoices",
+            as: "invoice",
+            cond: { $eq: ["$$invoice.inv_no", { $max: "$invoices.inv_no" }] },
+          },
+        },
+      },
+    },
+  ])
+  .toArray();
   const properties = JSON.parse(JSON.stringify(data));
 
   return {

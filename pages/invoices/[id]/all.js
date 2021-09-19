@@ -1,15 +1,14 @@
 import { useRouter } from "next/router";
 import { useUser } from "@auth0/nextjs-auth0";
-import { useRef } from "react";
 import { ObjectId } from "bson";
 
 import Link from "next/link";
 
-import { connectToDatabase } from "../../../lib/mongodb";
+import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
 import projection from "../../../utils/projection.json";
-import { formatPrice } from "../../../utils/format";
-import GeneratePdf from "../../../components/GeneratePdf";
+import { formatDate, formatPrice } from "../../../utils/format";
+
 
 const CustomerDetails = (props) => {
   const { user, isLoading } = useUser();
@@ -25,11 +24,15 @@ const CustomerDetails = (props) => {
       </div>
     );
   }
+
+  function getBgColor(index){
+    if(index % 2 === 0) return "bg-white"
+  }
   
   return (
-    <div className="w-screen flex justify-end">
+    <div className="w-screen flex justify-center">
       <SideBar user={user} id={id} business_name={business_name} />
-      <div className="w-3/4 my-6 pr-40 grid">
+      <div className="w-full sm:w-7/12 my-8 grid">
         <div className="flex items-center justify-between">
           <h1>Invoices</h1>
           <Link href={`/invoices/${id}/add`}>
@@ -43,13 +46,17 @@ const CustomerDetails = (props) => {
             </a>
           </Link>
         </div>
+        <div className="mt-6">
         {invoices ? (
-          invoices.map((invoice) => {
+          invoices.map((invoice, index) => {
             return (
-              <div className="my-6 flex justify-between border-blue-900 border-2 rounded-md p-4" key={invoice.inv_id}>
-                <div className="inline-flex">
-                  <p>{invoice.cust_name}</p>
-                  <p className="mx-4">{invoice.line_items[0]? invoice.line_items[0].line_name : ""}</p>
+              <div className={`${getBgColor(index)}  flex justify-between border-blue-900 py-6 px-4`} key={invoice.inv_id}>
+                <div className="inline-flex gap-x-4">
+                  <p>{invoice.inv_no}</p>
+                  <p>{formatDate(invoice.inv_date)}</p>
+                  <p>{formatDate(invoice.due_date)}</p>
+                  <p>{`${invoice.customer.first_name} ${invoice.customer.sur_name}`}</p>
+                  <p>{invoice.line_items[0]? invoice.line_items[0].line_name : ""}</p>
                 <p>{invoice.line_items[0]? "£" + formatPrice(invoice.line_items[0].price): ""}</p>
                 </div>
                 <div>
@@ -69,6 +76,7 @@ const CustomerDetails = (props) => {
         ) : (
           <div>No invoices to display</div>
         )}
+      </div>
       </div>
     </div>
   );

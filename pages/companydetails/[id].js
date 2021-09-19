@@ -1,11 +1,9 @@
 import { useRouter } from "next/router";
 import { useUser } from "@auth0/nextjs-auth0";
 
-import { useState, useEffect } from "react";
+import { ObjectId } from "bson";
 
-import { ObjectId } from "mongodb";
-
-import { connectToDatabase } from "../../lib/mongodb";
+import { connectToDatabase } from "../../db/mongodb";
 import SideBar from "../../components/sidebar/Sidebar";
 
 

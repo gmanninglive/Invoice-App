@@ -1,4 +1,3 @@
-import { ObjectId } from "bson";
 import { useRouter } from "next/router";
 
 // TODO Add security popup on delete button to stop accidental deletion.
@@ -74,7 +73,7 @@ export default function EditCustomer(props) {
 
   return (
     <>
-      <form className="grid grid-cols-2 gap-y-1" onSubmit={handleSubmit}>
+      <form className="grid grid-cols-2 gap-y-1 my-6" onSubmit={handleSubmit}>
         <label className="label" htmlFor="first_name">
           Business Name
         </label>

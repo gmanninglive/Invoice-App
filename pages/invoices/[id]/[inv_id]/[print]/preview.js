@@ -3,8 +3,8 @@ import { Fragment, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ObjectId } from "bson";
 
-import { formatPrice } from "../../../../../utils/format";
-import { connectToDatabase } from "../../../../../lib/mongodb";
+import { formatDate, formatPrice } from "../../../../../utils/format";
+import { connectToDatabase } from "../../../../../db/mongodb";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
 import { GeneratePdf } from "../../../../../components/GeneratePdf";
@@ -16,17 +16,17 @@ export default function Invoice(props) {
   const router = useRouter();
   const { print } = router.query;
   const { user, isLoading } = useUser();
-  const { customers } = props.properties[0];
+  
   const { invoices, business } = props.properties[0];
   let b = business;
+  const { line_items, sub_total, vat_total, total_due, inv_date, due_date, inv_no} = invoices[0]
 
   useEffect(() => {
     if(user && (print == "true")){
       GeneratePdf(ref);
     }
   }, [user])
-
-  let customer = findCustomer(customers, invoices);
+  
   const {
     cust_id,
     first_name,
@@ -39,23 +39,18 @@ export default function Invoice(props) {
     email,
     landline,
     mobile,
-  } = customer;
+  } = invoices[0].customer;
 
   let data = {
     currency: "£",
 
     invoice: {
-      number: "1",
       prefix: "000",
-      date: "26/08/21",
-      due: "31/08/21",
     },
   };
-
-  const { line_items } = invoices[0]
-  let subtotal = formatPrice(subtotalSum(line_items));
-  let vat = formatPrice(vatSum(line_items));
-  let total = formatPrice(subtotalSum(line_items)+vatSum(line_items));
+  function getBgColor(index){
+    if(index % 2 != 0) return "bg-gray-100"
+  }
 
   if(!user) return ( <div>Loading...</div>);
 
@@ -66,16 +61,15 @@ export default function Invoice(props) {
           <div>
             <h1 className="text-4xl">Invoice</h1>
             <div className="pt-4">
-              <p>{`Date: ${data.invoice.date}`}</p>
-              <p>{`Due: ${data.invoice.due}`}</p>
-              <p>{`Invoice #: ${data.invoice.prefix}${data.invoice.number}`}</p>
+              <p>{`Invoice Date: ${formatDate(inv_date)}`}</p>
+              <p>{`Due: ${formatDate(due_date)}`}</p>
+              <p>{`Invoice #: ${data.invoice.prefix}${inv_no}`}</p>
             </div>
             <p className="font-bold pt-2">Invoice to:</p>
             <p>{`${first_name} ${sur_name}`}</p>
             <p>{add_l1}</p>
             <p>{add_l2}</p>
             <p>{add_l3}</p>
-            <p>{add_l4}</p>
             <p>{postcode}</p>
           </div>
 
@@ -98,7 +92,7 @@ export default function Invoice(props) {
           </div>
         </header>
 
-        <div className="grid grid-cols-6 p-6">
+        <div className="grid p-6 invoice_items" >
           <div className="font-bold">Line Title</div>
           <div className="font-bold">Description</div>
           <div className="font-bold">Quantity</div>
@@ -106,24 +100,26 @@ export default function Invoice(props) {
           <div className="font-bold">VAT</div>
           <div className="font-bold">Total</div>
 
-          {line_items.map((lineitem) => (
-            <Fragment key={lineitem.line_name}>
-              <div className="">{lineitem.line_name}</div>
-              <div className="">{lineitem.description}</div>
-              <div className="">{lineitem.quantity}</div>
-              <div className="">{formatPrice(lineitem.price)}</div>
-              <div className="">{`${lineitem.vat * 100}%`}</div>
-              <div className="">
+          {line_items.map((lineitem, index) => (
+            <Fragment  key={lineitem.line_name}>
+              <div className={`${getBgColor(index)} my-2 py-2`}>{lineitem.line_name}</div>
+              <div className={`${getBgColor(index)} my-2 py-2`}>{lineitem.description}</div>
+              <div className={`${getBgColor(index)} my-2 py-2`}>{lineitem.quantity}</div>
+              <div className={`${getBgColor(index)} my-2 py-2`}>{formatPrice(lineitem.price)}</div>
+              <div className={`${getBgColor(index)} my-2 py-2`}>{`${lineitem.vat * 100}%`}</div>
+              <div className={`${getBgColor(index)} my-2 py-2`}>
                 {`${data.currency}
                     ${formatPrice(lineitem.quantity * lineitem.price)}`}
               </div>
+              
             </Fragment>
+            
           ))}
         </div>
         <div className="grid justify-end pr-6 ">
-          <div>{`Subtotal ${data.currency}${subtotal}`} </div>
-          <div>{`VAT ${data.currency}${vat}`}</div>
-          <div className="font-bold text-2xl w-40">{`Total Due ${data.currency}${total}`}</div>
+          <div>{`Subtotal ${data.currency}${sub_total}`} </div>
+          <div>{`VAT ${data.currency}${vat_total}`}</div>
+          <div className="font-bold text-2xl w-40">{`Total Due ${data.currency}${total_due}`}</div>
         </div>
 
         <footer className="absolute bottom-5 w-full border-t-2">
@@ -157,7 +153,6 @@ export async function getServerSideProps(context) {
               cond: { $eq: ["$$invoice.inv_id", inv_id] },
             },
           },
-          customers: 1,
         },
       },
     ])
@@ -170,42 +165,3 @@ export async function getServerSideProps(context) {
     props: { properties },
   };
 }
-
-// Helper function to get customer asscociated with invoice
-export const findCustomer = (customers, invoices) => {
-  let temp;
-  for (let i = 0; i < customers.length; i++) {
-    temp = customers[i];
-    if (temp.cust_id === invoices[0].cust_id) return temp;
-  }
-};
-
-export const subtotalSum = (data) => {
-  let result = 0;
-  for (let i = 0; i < data.length; i++) {
-    result += data[i].price * data[i].quantity;
-  }
-  return result;
-};
-
-export const vatSum = (data) => {
-  let result = 0.0;
-  for (let i = 0; i < data.length; i++) {
-    result += data[i].price * data[i].quantity * data[i].vat;
-  }
-  return result;
-};
-
-// business {
-  //   business_name,
-  //   add_l1,
-  //   add_l2,
-  //   add_l3,
-  //   add_l4,
-  //   postcode,
-  //   email,
-  //   landline,
-  //   mobile,
-  //   vat_no,
-  //   ltd_no,
-  // } 

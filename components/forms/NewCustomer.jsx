@@ -36,7 +36,7 @@ export default function NewCustomer(props){
 
   return (
     <>
-      <form className="grid grid-cols-2 gap-y-1" onSubmit={handleSubmit}>
+      <form className="grid grid-cols-2 gap-y-1 my-6" onSubmit={handleSubmit}>
         <label className="label" htmlFor="first_name">Business Name</label>
         <input
           name="first_name"

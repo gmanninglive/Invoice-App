@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ObjectId } from "bson";
 import Link from "next/link";
 
-import { connectToDatabase } from "../../../lib/mongodb";
+import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
 
 import { sortCustomers } from "../../../utils/sort";
@@ -34,9 +34,9 @@ const CustomerDetails = (props) => {
   }
 
   return (
-    <div className="w-screen flex justify-end">
+    <div className="w-screen flex justify-center">
       <SideBar user={user} id={id} business_name={business_name} />
-      <div className="w-3/4 my-6 pr-40 grid">
+      <div className="w-full sm:w-7/12 my-8 grid relative">
         <div className="flex items-center justify-between">
           <h1>Customers</h1>
 
