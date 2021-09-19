@@ -32,8 +32,16 @@
   .label{
     @apply mt-2;
   }
+  .invoice_list{
+    grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr 3fr;
+
+  }
   .invoice_items{
     grid-template-columns: 1.5fr 3.5fr 1fr 1.25fr 0.75fr 1fr;
+
+  }
+  .customer_list{
+    grid-template-columns: 0.75fr 0.75fr 1.25fr 0.75fr 2fr 1fr 0.5fr 1fr;
 
   }
   

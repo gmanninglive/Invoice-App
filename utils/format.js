@@ -28,3 +28,7 @@ export const formatDate = (date) => {
 
   return new Date(date).toDateString().slice(4);
 }
+
+export function getBgColor(index, color){
+  if(index % 2 === 0) return color;
+}

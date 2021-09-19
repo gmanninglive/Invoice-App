@@ -3,7 +3,7 @@ import { Fragment, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ObjectId } from "bson";
 
-import { formatDate, formatPrice } from "../../../../../utils/format";
+import { formatDate, formatPrice, getBgColor } from "../../../../../utils/format";
 import { connectToDatabase } from "../../../../../db/mongodb";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
@@ -48,10 +48,7 @@ export default function Invoice(props) {
       prefix: "000",
     },
   };
-  function getBgColor(index){
-    if(index % 2 != 0) return "bg-gray-100"
-  }
-
+  
   if(!user) return ( <div>Loading...</div>);
 
   return (
@@ -99,23 +96,24 @@ export default function Invoice(props) {
           <div className="font-bold">Unit price</div>
           <div className="font-bold">VAT</div>
           <div className="font-bold">Total</div>
+        </div>
 
           {line_items.map((lineitem, index) => (
-            <Fragment  key={lineitem.line_name}>
-              <div className={`${getBgColor(index)} my-2 py-2`}>{lineitem.line_name}</div>
-              <div className={`${getBgColor(index)} my-2 py-2`}>{lineitem.description}</div>
-              <div className={`${getBgColor(index)} my-2 py-2`}>{lineitem.quantity}</div>
-              <div className={`${getBgColor(index)} my-2 py-2`}>{formatPrice(lineitem.price)}</div>
-              <div className={`${getBgColor(index)} my-2 py-2`}>{`${lineitem.vat * 100}%`}</div>
-              <div className={`${getBgColor(index)} my-2 py-2`}>
+            <div className={`${getBgColor(index, "bg-gray-100")} grid invoice_items p-6`} key={lineitem.line_name}>
+              <div>{lineitem.line_name}</div>
+              <div>{lineitem.description}</div>
+              <div>{lineitem.quantity}</div>
+              <div>{formatPrice(lineitem.price)}</div>
+              <div>{`${lineitem.vat * 100}%`}</div>
+              <div>
                 {`${data.currency}
                     ${formatPrice(lineitem.quantity * lineitem.price)}`}
               </div>
               
-            </Fragment>
+            </ div>
             
           ))}
-        </div>
+        
         <div className="grid justify-end pr-6 ">
           <div>{`Subtotal ${data.currency}${sub_total}`} </div>
           <div>{`VAT ${data.currency}${vat_total}`}</div>

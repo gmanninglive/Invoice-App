@@ -7,7 +7,7 @@ import Link from "next/link";
 import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
 import projection from "../../../utils/projection.json";
-import { formatDate, formatPrice } from "../../../utils/format";
+import { formatDate, formatPrice, getBgColor} from "../../../utils/format";
 
 
 const CustomerDetails = (props) => {
@@ -25,14 +25,14 @@ const CustomerDetails = (props) => {
     );
   }
 
-  function getBgColor(index){
-    if(index % 2 === 0) return "bg-white"
-  }
+  
   
   return (
     <div className="w-screen flex justify-center">
       <SideBar user={user} id={id} business_name={business_name} />
+      
       <div className="w-full sm:w-7/12 my-8 grid">
+      
         <div className="flex items-center justify-between">
           <h1>Invoices</h1>
           <Link href={`/invoices/${id}/add`}>
@@ -46,20 +46,31 @@ const CustomerDetails = (props) => {
             </a>
           </Link>
         </div>
+        <div className="grid invoice_list gap-x-2 text-center font-bold mt-6">
+        <p>Invoice no</p>
+        <p>Invoice Date</p>
+        <p>Due Date</p>
+        <p>Customer</p>
+        <p>Job Summary</p>
+        <p>Total</p>
+        <p></p>
+          
+    
+      </div>
         <div className="mt-6">
         {invoices ? (
           invoices.map((invoice, index) => {
             return (
-              <div className={`${getBgColor(index)}  flex justify-between border-blue-900 py-6 px-4`} key={invoice.inv_id}>
-                <div className="inline-flex gap-x-4">
+              <div className={`${getBgColor(index, "bg-white")}  grid invoice_list border-blue-900 py-6 gap-x-2 text-center`} key={invoice.inv_id}>
+                
                   <p>{invoice.inv_no}</p>
                   <p>{formatDate(invoice.inv_date)}</p>
                   <p>{formatDate(invoice.due_date)}</p>
                   <p>{`${invoice.customer.first_name} ${invoice.customer.sur_name}`}</p>
                   <p>{invoice.line_items[0]? invoice.line_items[0].line_name : ""}</p>
-                <p>{invoice.line_items[0]? "£" + formatPrice(invoice.line_items[0].price): ""}</p>
-                </div>
-                <div>
+                  <p>{invoice.line_items[0]? "£" + formatPrice(invoice.line_items[0].price): ""}</p>
+
+                <div className="justify-end">
                 <Link href={`/invoices/${id}/${invoice.inv_id}/${true}/preview`}>
                   <a className="rounded-xl border-2 py-2 px-4 mx-2">Save</a>
                 </Link>

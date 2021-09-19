@@ -7,6 +7,8 @@ import Link from "next/link";
 import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
 
+import { getBgColor } from "../../../utils/format";
+
 import { sortCustomers } from "../../../utils/sort";
 
 const CustomerDetails = (props) => {
@@ -51,7 +53,7 @@ const CustomerDetails = (props) => {
             </a>
           </Link>
         </div>
-        <div className="inline-flex gap-2 mt-6">
+        <div className="grid customer_list mt-6 text-center ">
           <button
             className={`border-b-4 ${sortFirst} `}
             type="button"
@@ -66,20 +68,24 @@ const CustomerDetails = (props) => {
           >
             Surname
           </button>
-          <p className="ml-10">Address</p>
+          <p className="">Address</p>
+          <p>Postcode</p>
+          <p>Email</p>
+          <p>Phone</p>
         </div>
-        {customers.map((customer) => {
+        {customers.map((customer, index) => {
           return (
-            <div className=" my-6 flex justify-between" key={customer.cust_id}>
-              <div className="inline-flex gap-10">
+            <div className={`${getBgColor(index, "bg-white")} py-6 grid customer_list text-center items-center `} key={customer.cust_id}>
+             
                 <p>{customer.first_name}</p>
                 <p>{customer.sur_name}</p>
                 <p>{customer.add_l1}</p>
                 <p>{customer.postcode}</p>
-                <p>{customer.email}</p>
-                <p>{customer.landline}</p>
-                <p>{customer.mobile}</p>
-              </div>
+                <p className="mr-2">{customer.email}</p>
+                <p>{customer.landline || customer.mobile}</p>
+                <p></p>
+                
+              
 
               <Link href={`/customers/${id}/${customer.cust_id}`}>
                 <a className="w-20 rounded-xl border-2 py-2 px-4 text-center ">
