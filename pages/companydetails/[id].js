@@ -61,15 +61,10 @@ const CompanyDetails = (props) => {
   }
 
   return (
-    <div className="w-screen flex justify-end">
-      <SideBar
-        user={user}
-        id={id}
-        business_name={business_name}
-      />
-      <div className="w-3/4 my-6 grid">
+
+      <div className="pb-20">
         <h1>Edit Business Details</h1>
-        <form className="w-3/4 grid grid-cols-2 gap-y-1" onSubmit={handleSubmit}>
+        <form className="grid grid-cols-2 gap-y-1" onSubmit={handleSubmit}>
           <label className="label" htmlFor="business_name">
             Business Name
           </label>
@@ -79,7 +74,6 @@ const CompanyDetails = (props) => {
             placeholder={business_name ? business_name : "set business name"}
             defaultValue={business_name && business_name}
           />
-
           <label className="label" htmlFor="add_l1">
             Address Line 1
           </label>
@@ -188,7 +182,6 @@ const CompanyDetails = (props) => {
           </button>
         </form>
       </div>
-    </div>
   );
 };
 

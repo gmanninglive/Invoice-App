@@ -29,9 +29,7 @@ const CustomerDetails = (props) => {
   
 
   return (
-    <div className="w-screen flex justify-center">
-      <SideBar user={user} id={id} business_name={business_name} />
-      <div className="w-full sm:w-7/12 my-8 grid relative">
+    <div className="pb-20">
         <button
           className="absolute top-0 right-0 mx-auto rounded-xl border-2 py-2 px-4"
           type="button"
@@ -43,7 +41,6 @@ const CustomerDetails = (props) => {
         <h1>Add New Invoice</h1>
         <NewInvoice url={id} customers={customers} inv_no={newInvNo} />
       </div>
-    </div>
   );
 };
 

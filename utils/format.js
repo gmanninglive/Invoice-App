@@ -28,7 +28,14 @@ export const formatDate = (date) => {
 
   return new Date(date).toDateString().slice(4);
 }
+export const daysDue = (due) => {
+  let temp = new Date()
+  let days = Math.round((new Date(due) - temp)/1000/3600/24);
+  if (days<0) return `Overdue by ${Math.abs(days)} days!`;
+  else return `Due in ${days} days`;
+}
 
 export function getBgColor(index, color){
-  if(index % 2 === 0) return color;
+  if(index % 2 != 0) return color;
+  else return "bg-transparent"
 }

@@ -36,10 +36,9 @@ const CustomerDetails = (props) => {
   }
 
   return (
-    <div className="w-screen flex justify-center">
-      <SideBar user={user} id={id} business_name={business_name} />
-      <div className="w-full sm:w-7/12 my-8 grid relative">
-        <div className="flex items-center justify-between">
+    <>
+    <div className="w-full pb-20">
+      <div className="flex items-center justify-between">
           <h1>Customers</h1>
 
           <Link href={`/customers/${id}/add`}>
@@ -53,7 +52,7 @@ const CustomerDetails = (props) => {
             </a>
           </Link>
         </div>
-        <div className="grid customer_list mt-6 text-center ">
+        <div className="inline flex flex-wrap justify-evenly mt-6">
           <button
             className={`border-b-4 ${sortFirst} `}
             type="button"
@@ -75,7 +74,7 @@ const CustomerDetails = (props) => {
         </div>
         {customers.map((customer, index) => {
           return (
-            <div className={`${getBgColor(index, "bg-white")} py-6 grid customer_list text-center items-center `} key={customer.cust_id}>
+            <div className={`${getBgColor(index, "bg-white")}  py-6 flex justify-evenly flex-wrap items-center `} key={customer.cust_id}>
              
                 <p>{customer.first_name}</p>
                 <p>{customer.sur_name}</p>
@@ -95,8 +94,8 @@ const CustomerDetails = (props) => {
             </div>
           );
         })}
-      </div>
-    </div>
+        </div>
+     </>
   );
 };
 

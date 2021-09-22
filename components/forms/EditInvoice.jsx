@@ -11,7 +11,7 @@ import { formatPrice, subtotalSum, vatSum } from "../../utils/format";
 
 export default function EditInvoice(props) {
   const router = useRouter();
-  const { inv_id, cust_id, customer, description, price, line_items } = props.invoices[0];
+  const { inv_id, cust_id, customer, description, price, line_items, inv_no} = props.invoices[0];
   const  customers  = props.customers;
 
   let previewUrl = `/invoices/${router.query.id}/${router.query.inv_id}/preview`;
@@ -71,7 +71,7 @@ export default function EditInvoice(props) {
           customer: JSON.stringify(customer),
           inv_date: dateToday,
           due_date: dateDue,
-          inv_no: 0,
+          inv_no: inv_no,
           line_items: line_items,
           }
         }
