@@ -1,32 +1,6 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-
-const data = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-  datasets: [
-    {
-      
-      data: [0, 2000, 1450, 600, 15000, 8000, 250, 950, 865, 10950, 12000, 7500],
-      backgroundColor: [
-        'rgba(255, 99, 132, 0.2)',
-        'rgba(54, 162, 235, 0.2)',
-        'rgba(255, 206, 86, 0.2)',
-        'rgba(75, 192, 192, 0.2)',
-        'rgba(153, 102, 255, 0.2)',
-        'rgba(255, 159, 64, 0.2)',
-      ],
-      borderColor: [
-        'rgba(255, 99, 132, 1)',
-        'rgba(54, 162, 235, 1)',
-        'rgba(255, 206, 86, 1)',
-        'rgba(75, 192, 192, 1)',
-        'rgba(153, 102, 255, 1)',
-        'rgba(255, 159, 64, 1)',
-      ],
-      borderWidth: 1,
-    },
-  ],
-};
+import { formatPrice } from 'utils/format';
 
 const options = {
     plugins: {
@@ -56,10 +30,47 @@ const options = {
   },
 };
 
-const VerticalBar = () => (
-  <>
+const VerticalBar = ({sales}) => {
+  console.log(sales)
+
+  let totals = [0,0,0,0,0,0,0,0,0,0,0,0,];
+  for ( let i = 0; i < sales.length; i++){
+    totals[sales[i]._id - 1] = formatPrice(sales[i].totalValue)
+        }
+
+  const data = {
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    datasets: [
+      {
+        
+        data: totals,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.2)',
+          'rgba(54, 162, 235, 0.2)',
+          'rgba(255, 206, 86, 0.2)',
+          'rgba(75, 192, 192, 0.2)',
+          'rgba(153, 102, 255, 0.2)',
+          'rgba(255, 159, 64, 0.2)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)',
+          'rgba(153, 102, 255, 1)',
+          'rgba(255, 159, 64, 1)',
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+
+return (
+  <div>
     <Bar data={data} options={options} />
-  </>
+  </div>
 );
+}
 
 export default VerticalBar;

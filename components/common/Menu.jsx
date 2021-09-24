@@ -5,8 +5,9 @@ import { FiChevronDown } from 'react-icons/fi'
 import { useRouter } from 'next/router';
 
 
+
 function NextLink(props) {
-    let { href, children, style, ...rest } = props;
+    let { href, children, style,  ...rest } = props;
     return (
       <Link href={href}>
         <a className={style}>{children}</a>
@@ -14,10 +15,24 @@ function NextLink(props) {
     );
   }
   
-export default function DropdownMenu({ edit, save, ...rest }) {
+export default function DropdownMenu({ edit, save, user_id, inv_id, ...rest }) {
     const router = useRouter();
     
-    console.log({...rest})
+    async function handleDelete(e) {
+      e.preventDefault();
+      const body = {
+        inv_id: inv_id,
+      };
+    
+      const res = await fetch(`/api/invoices/${user_id}/${inv_id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) {
+        router.reload();
+      }
+    }
   return (
 
       <Menu as="div" className=" relative inline-block text-left" {...rest} >
@@ -94,6 +109,7 @@ export default function DropdownMenu({ edit, save, ...rest }) {
                     className={`${
                       active ? 'bg-blue-300 text-white' : 'text-gray-900'
                     } group flex rounded-md items-center w-full px-2 py-2 text-sm`}
+                    onClick={(e) => handleDelete(e)}
                   >
                     {active ? (
                       <DeleteActiveIcon

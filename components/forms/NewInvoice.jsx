@@ -13,12 +13,11 @@ export default function NewInvoice({ url, customers, inv_no }) {
   const inv_id = ObjectId();
 
   async function handleSubmit(values) {
-    let subtotal = formatPrice(subtotalSum(values.line_items));
-    let vat = formatPrice(vatSum(values.line_items));
-    let total = formatPrice(
-      subtotalSum(values.line_items) + vatSum(values.line_items)
-    );
-
+    let subtotal = subtotalSum(values.line_items);
+    let vat = vatSum(values.line_items) ;
+    let total = 
+      (subtotalSum(values.line_items) + vatSum(values.line_items));
+    console.log(subtotal, vat, total)
     const body = {
       inv_id: inv_id,
       inv_no: values.inv_no,
@@ -28,9 +27,9 @@ export default function NewInvoice({ url, customers, inv_no }) {
       customer: JSON.parse(values.customer),
       line_items: values.line_items,
       notes: values.notes,
-      sub_total: subtotal,
-      vat_total: vat,
-      total_due: total,
+      sub_total: parseInt(subtotal),
+      vat_total: parseInt(vat),
+      total_due: parseInt(total),
     };
 
     const res = await fetch(`/api/invoices/${url}`, {
@@ -211,7 +210,7 @@ export default function NewInvoice({ url, customers, inv_no }) {
                               <button
                                 type="button"
                                 className="text-blue-600"
-                                onClick={() => arrayHelpers.insert(index, "")} // Insert an empty line_item object at a position
+                                onClick={() => arrayHelpers.insert(index, line_item)} // Insert an empty line_item object at a position
                               >
                                 <HiPlus size={32} />
                               </button>

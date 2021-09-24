@@ -1,8 +1,9 @@
 import { useRouter } from "next/router";
 import { useUser } from "@auth0/nextjs-auth0";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ObjectId } from "bson";
 import Link from "next/link";
+import {FiSearch} from 'react-icons/fi'
 
 import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
@@ -14,18 +15,53 @@ import { sortCustomers } from "../../../utils/sort";
 const CustomerDetails = (props) => {
   const { user, isLoading } = useUser();
   const router = useRouter();
+  const [{ customers }, setCustomers] = useState(props.properties[0]);
   const { id } = router.query;
-  const { customers } = props.properties[0];
-  const { business_name } = props.properties[0].business;
+
+  console.log(props.properties[0]);
 
   // State to sort customers by and change colour of selected sort term
   const [sortBy, setSortBy] = useState("first_name");
   const sortFirst =
-    sortBy === "first_name" ? "border-blue-600" : "border-gray-200";
-  const sortSur = sortBy === "sur_name" ? "border-blue-600" : "border-gray-200";
+    sortBy.slice(0, 5) === "first" ? "border-blue-600" : "border-gray-200";
+  const sortSur =
+    sortBy.slice(0, 3) === "sur" ? "border-blue-600" : "border-gray-200";
+
+  // Sorting handlers
+  function handleSortByFirst() {
+    if (sortBy == "first_nameASC") setSortBy("first_nameDESC");
+    else setSortBy("first_nameASC");
+  }
+  function handleSortBySur() {
+    if (sortBy == "sur_nameASC") setSortBy("sur_nameDESC");
+    else setSortBy("sur_nameASC");
+  }
 
   // Call Sorting Function
   sortCustomers(sortBy, customers);
+
+  // Async Search function
+  async function handleSearch(e) {
+    e.preventDefault();
+    const body = {
+      cust_name: e.target.search.value,
+    };
+
+    const res = await fetch(`/api/customers/${id}/all`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+
+    const data = await res.json();
+
+    let customers = [];
+
+    if (data.length > 0) {
+      customers.push(data[0].customers);
+      setCustomers({ customers });
+    } else setCustomers(props.properties[0]);
+  }
 
   if (!user) {
     return (
@@ -37,8 +73,8 @@ const CustomerDetails = (props) => {
 
   return (
     <>
-    <div className="w-full pb-20">
-      <div className="flex items-center justify-between">
+      <div className="w-full pb-20 px-2">
+        <div className="flex items-center justify-between py-6">
           <h1>Customers</h1>
 
           <Link href={`/customers/${id}/add`}>
@@ -52,50 +88,51 @@ const CustomerDetails = (props) => {
             </a>
           </Link>
         </div>
-        <div className="inline flex flex-wrap justify-evenly mt-6">
-          <button
-            className={`border-b-4 ${sortFirst} `}
-            type="button"
-            onClick={() => setSortBy("first_name")}
-          >
-            Firstname
-          </button>
-          <button
-            className={`border-b-4 ${sortSur}`}
-            type="button"
-            onClick={() => setSortBy("sur_name")}
-          >
-            Surname
-          </button>
-          <p className="">Address</p>
-          <p>Postcode</p>
-          <p>Email</p>
-          <p>Phone</p>
+        <div className="w-full p-1 bg-blue-900/20 rounded-xl shadow-md ">
+          <form onSubmit={handleSearch} className="relative">
+            <input
+              name="search"
+              type="text"
+              placeholder="Search"
+              className="bg-white rounded-xl focus:outline-none w-full"
+            />
+            <button type="submit" className="absolute right-2 top-2 bottom-2"><FiSearch size="24"/></button>
+          </form>
         </div>
-        {customers.map((customer, index) => {
-          return (
-            <div className={`${getBgColor(index, "bg-white")}  py-6 flex justify-evenly flex-wrap items-center `} key={customer.cust_id}>
-             
-                <p>{customer.first_name}</p>
-                <p>{customer.sur_name}</p>
-                <p>{customer.add_l1}</p>
-                <p>{customer.postcode}</p>
-                <p className="mr-2">{customer.email}</p>
-                <p>{customer.landline || customer.mobile}</p>
-                <p></p>
-                
-              
+        <div className="my-2 bg-white rounded-xl shadow-md">
+          {customers.map((customer, index) => {
+            return (
+              <ul
+                className={`w-full inline-flex flex-wrap justify-between items-center
+                py-6 px-6
+                ${getBgColor(index, "bg-blue-100")} 
+                ${customers[index + 1] == undefined ? "rounded-b-xl" : ""} `}
+                key={customer.cust_id}
+              >
+                <li className="grid grid-cols-1">
+                  <p className="font-bold ">{`${customer.first_name} ${customer.sur_name}`}</p>
+                  <p>{customer.add_l1}</p>
+                  <p>{customer.add_l2}</p>
+                  <p>{customer.add_l3}</p> 
+                  <p>{customer.postcode}</p>
+                  <p>{customer.email}</p>
+                  <p>{customer.landline}</p>
+                  <p>{customer.mobile}</p>
+                </li>
 
-              <Link href={`/customers/${id}/${customer.cust_id}`}>
-                <a className="w-20 rounded-xl border-2 py-2 px-4 text-center ">
-                  Edit
-                </a>
-              </Link>
-            </div>
-          );
-        })}
+                <li className="flex-col justify-center">
+                  <Link href={`/customers/${id}/${customer.cust_id}`}>
+                    <a className="rounded-xl border-2 py-2 px-4 text-center m-0 bg-white">
+                      Edit
+                    </a>
+                  </Link>
+                </li>
+              </ul>
+            );
+          })}
         </div>
-     </>
+      </div>
+    </>
   );
 };
 

@@ -3,7 +3,7 @@ import { Fragment, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ObjectId } from "bson";
 
-import { formatDate, formatPrice, getBgColor } from "../../../../../utils/format";
+import { formatDate, formatPrice, getBgColor, formatLineItem } from "../../../../../utils/format";
 import { connectToDatabase } from "../../../../../db/mongodb";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
@@ -11,7 +11,6 @@ import { GeneratePdf } from "../../../../../components/GeneratePdf";
 
 export default function Invoice(props) {
 
-  
   const ref = useRef();
   const router = useRouter();
   const { print } = router.query;
@@ -53,7 +52,7 @@ export default function Invoice(props) {
 
   return (
     <div className="page-wrapper" ref={ref}>
-      <div className="bg-white page shadow-md relative">
+      <div className="bg-white page shadow-md relative ">
         <header className="relative p-6 flex justify-between mb-5 bg-blue-900 text-gray-100 shadow-md">
           <div>
             <h1 className="text-4xl">Invoice</h1>
@@ -103,11 +102,11 @@ export default function Invoice(props) {
               <div>{lineitem.line_name}</div>
               <div>{lineitem.description}</div>
               <div>{lineitem.quantity}</div>
-              <div>{formatPrice(lineitem.price)}</div>
+              <div>{formatLineItem(lineitem.price)}</div>
               <div>{`${lineitem.vat * 100}%`}</div>
               <div>
                 {`${data.currency}
-                    ${formatPrice(lineitem.quantity * lineitem.price)}`}
+                    ${formatLineItem(lineitem.quantity * lineitem.price)}`}
               </div>
               
             </ div>
@@ -115,9 +114,9 @@ export default function Invoice(props) {
           ))}
         
         <div className="grid justify-end pr-6 ">
-          <div>{`Subtotal ${data.currency}${sub_total}`} </div>
-          <div>{`VAT ${data.currency}${vat_total}`}</div>
-          <div className="font-bold text-2xl w-40">{`Total Due ${data.currency}${total_due}`}</div>
+          <div>{`Subtotal ${data.currency}${formatPrice(sub_total)}`} </div>
+          <div>{`VAT ${data.currency}${formatPrice(vat_total)}`}</div>
+          <div className="font-bold text-2xl w-40">{`Total Due ${data.currency}${formatPrice(total_due)}`}</div>
         </div>
 
         <footer className="absolute bottom-5 w-full border-t-2">

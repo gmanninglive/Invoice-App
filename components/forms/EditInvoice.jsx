@@ -11,16 +11,18 @@ import { formatPrice, subtotalSum, vatSum } from "../../utils/format";
 
 export default function EditInvoice(props) {
   const router = useRouter();
-  const { inv_id, cust_id, customer, description, price, line_items, inv_no} = props.invoices[0];
-  const  customers  = props.customers;
+  const { inv_id, cust_id, customer, description, price, line_items, inv_no } =
+    props.invoices[0];
+  const customers = props.customers;
 
   let previewUrl = `/invoices/${router.query.id}/${router.query.inv_id}/preview`;
   const url = props.url;
- 
+
   async function handleSubmit(values) {
-    let subtotal = formatPrice(subtotalSum(values.line_items));
-    let vat = formatPrice(vatSum(values.line_items));
-    let total = formatPrice(subtotalSum(values.line_items)+vatSum(values.line_items));
+    let subtotal = subtotalSum(values.line_items);
+    let vat = vatSum(values.line_items);
+    let total = 
+      subtotalSum(values.line_items) + vatSum(values.line_items);
     const body = {
       inv_id: inv_id,
       inv_no: values.inv_no,
@@ -31,7 +33,7 @@ export default function EditInvoice(props) {
       line_items: values.line_items,
       sub_total: subtotal,
       vat_total: vat,
-      total_due: total
+      total_due: total,
     };
 
     const res = await fetch(`/api/invoices/${url}`, {
@@ -41,15 +43,11 @@ export default function EditInvoice(props) {
     });
     if (res.ok) router.back();
   }
-  
+
   async function handleDelete(e) {
     e.preventDefault();
     const body = {
       inv_id: inv_id,
-      cust_id: cust_id,
-      cust_name: cust_name,
-      description: description,
-      price: price,
     };
 
     const res = await fetch(`/api/invoices/${url}`, {
@@ -73,17 +71,20 @@ export default function EditInvoice(props) {
           due_date: dateDue,
           inv_no: inv_no,
           line_items: line_items,
-          }
-        }
-        onSubmit={(values) => {handleSubmit(values)}
-        }>
+        }}
+        onSubmit={(values) => {
+          handleSubmit(values);
+        }}
+      >
         {({ values }) => (
-          <Form className="grid grid-cols-1">       {/* Customer Select */}
-            <label className="label" htmlFor="customer"> 
+          <Form className="grid grid-cols-1">
+            {" "}
+            {/* Customer Select */}
+            <label className="label" htmlFor="customer">
               Customer
             </label>
             <Field component="select" name="customer">
-              <option value='' />
+              <option value="" />
               {customers.map((customer) => {
                 return (
                   <option
@@ -97,14 +98,16 @@ export default function EditInvoice(props) {
               })}
             </Field>
             <div className="flex my-2">
-            <DatePicker name="inv_date" label="Select the Invoice Date" />
-            <DatePicker name="due_date" label="Select the Date Due" />
-            <div className="grid">
-            <label className="" htmlFor="inv_no" >Set Invoice Number</label>
-            <Field name="inv_no" type="number" />
+              <DatePicker name="inv_date" label="Select the Invoice Date" />
+              <DatePicker name="due_date" label="Select the Date Due" />
+              <div className="grid">
+                <label className="" htmlFor="inv_no">
+                  Set Invoice Number
+                </label>
+                <Field name="inv_no" type="number" />
+              </div>
             </div>
-            </div>
-            <FieldArray                               // Line Items Array
+            <FieldArray // Line Items Array
               name="line_items"
               render={(arrayHelpers) => (
                 <div>
@@ -213,7 +216,8 @@ export default function EditInvoice(props) {
                       onClick={() => arrayHelpers.push("")}
                     >
                       {/* Show this when user has removed all line items from the list */}
-                      <p className="py-2">Add a Line Item </p><HiPlus size={36} />
+                      <p className="py-2">Add a Line Item </p>
+                      <HiPlus size={36} />
                     </button>
                   )}
                   <div>
@@ -222,6 +226,13 @@ export default function EditInvoice(props) {
                       className="rounded-xl border-2 py-2 px-4 text-white bg-blue-600 hover:bg-blue-900 ease-in-out"
                     >
                       Save
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => handleDelete(e)}
+                      className="rounded-xl border-2 py-2 px-4 bg-red-600 hover:bg-red-300 ease-in-out"
+                    >
+                      Delete
                     </button>
                   </div>
                 </div>

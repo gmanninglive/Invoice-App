@@ -62,9 +62,13 @@ const CompanyDetails = (props) => {
 
   return (
 
-      <div className="pb-20">
-        <h1>Edit Business Details</h1>
-        <form className="grid grid-cols-2 gap-y-1" onSubmit={handleSubmit}>
+      <div className="pb-20 ">
+        <div className="w-full py-6 px-2">
+        <h1>Settings</h1>
+        <div className="rounded-xl bg-white/[0.5] p-2 mt-10">
+        <form className="rounded-xl grid grid-cols-2 gap-x-1 gap-y-1 " onSubmit={handleSubmit}>
+          
+          <h3 className="col-span-2">Business Details</h3>
           <label className="label" htmlFor="business_name">
             Business Name
           </label>
@@ -73,7 +77,9 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={business_name ? business_name : "set business name"}
             defaultValue={business_name && business_name}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
+          
           <label className="label" htmlFor="add_l1">
             Address Line 1
           </label>
@@ -82,6 +88,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={add_l1 ? add_l1 : "Set Address Line 1"}
             defaultValue={add_l1 && add_l1}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="add_l2">
@@ -92,6 +99,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={add_l2 ? add_l2 : "Set Address Line 2"}
             defaultValue={add_l2 && add_l2}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="add_l3">
@@ -102,6 +110,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={add_l3 ? add_l3 : "Set Address Line 3"}
             defaultValue={add_l3 && add_l3}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="add_l4">
@@ -112,6 +121,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={add_l4 ? add_l4 : "Set Address Line 4"}
             defaultValue={add_l4 && add_l4}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="postcode">
@@ -122,6 +132,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={postcode ? postcode : "Set Postcode"}
             defaultValue={postcode && postcode}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="email">
@@ -132,6 +143,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={email ? email : "Set Email Address"}
             defaultValue={email && email}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="landline">
@@ -142,6 +154,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={landline ? landline : "Set Landline Phone No"}
             defaultValue={landline && landline}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="mobile">
@@ -152,6 +165,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={mobile ? mobile : "Set Mobile Phone no"}
             defaultValue={mobile && mobile}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="vat_no">
@@ -162,6 +176,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={vat_no ? vat_no : "Set VAT Number or N/A"}
             defaultValue={vat_no && vat_no}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <label className="label" htmlFor="ltd_no">
@@ -172,6 +187,7 @@ const CompanyDetails = (props) => {
             type="text"
             placeholder={ltd_no ? ltd_no : "Set LTD Number or N/A"}
             defaultValue={ltd_no && ltd_no}
+            className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
           <button
@@ -181,6 +197,8 @@ const CompanyDetails = (props) => {
             Save
           </button>
         </form>
+        </div>
+        </div>
       </div>
   );
 };

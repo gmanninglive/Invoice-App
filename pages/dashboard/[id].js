@@ -10,20 +10,53 @@ import LineChart from "../../components/charts/Outstanding";
 import { Fragment } from "react";
 
 const IndexId = (props) => {
-  const { business_name } = props.properties[0].business;
+  console.log(props);
+  const { monthlySales } = props;
 
-  
+  function getBestMonth() {
+    let months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    let max = 0;
+    let month;
+    for (let i = 0; i < monthlySales.length; i++) {
+      if (monthlySales[i].totalValue > max) {
+        max = monthlySales[i].totalValue;
+        month = monthlySales[i]._id;
+      }
+    }
+    return months[month - 1];
+  }
+
   return (
     <>
-          <h1>This is the easy invoice Dashboard</h1>
-          <div className="w-full my-6 flex">
-            <div className="w-1/2 mr-4">
-              <VerticalBar />
-            </div>
-            <div className="w-1/2">
-              <LineChart />
-            </div>
-            </div>
+      <div className="inline-flex justify-start py-6">
+        <h1>Dashboard</h1>
+      </div>
+      <div className="w-full my-6 grid bg-white rounded-xl">
+        <div className="max-w-screen px-2 xl:w-1/2 xl:mx-auto">
+          <VerticalBar sales={monthlySales} />
+        </div>
+        <div className="inline-flex justify-center items-center py-4 px-2">
+          <h2>{`Your most profitable month is:
+            ${monthlySales.length > 0
+              ? getBestMonth()
+              : "Start creating invoices to generate insights"}
+            `}
+          </h2>
+        </div>
+      </div>
     </>
   );
 };
@@ -34,21 +67,38 @@ export async function getServerSideProps(context) {
   const { db } = await connectToDatabase();
   const { id } = context.query;
 
-  const data = await db
+  const montlySales = await db
     .collection("users")
-    .find({ _id: ObjectId(id) })
-    .project(projection)
+    .aggregate([
+      {
+        $match: { _id: ObjectId(id) },
+      },
+      {
+        $project: { invoices: 1 },
+      },
+      { $unwind: "$invoices" },
+      {
+        $group: {
+          _id: { $month: { $toDate: "$invoices.inv_date" } },
+          totalValue: {
+            $sum: { $sum: "$invoices.total_due" },
+          },
+        },
+      },
+    ])
     .toArray();
 
-  const properties = JSON.parse(JSON.stringify(data));
-
   return {
-    props: { properties },
+    props: {
+      monthlySales: JSON.parse(JSON.stringify(montlySales)),
+    },
   };
 }
 
-{/* <SideBar
+{
+  /* <SideBar
             user={user}
             id={user.sub.slice(6)}
             business_name={business_name}
-          /> */}
+          /> */
+}

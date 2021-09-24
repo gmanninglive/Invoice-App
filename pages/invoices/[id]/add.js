@@ -15,7 +15,7 @@ const CustomerDetails = (props) => {
   const { customers, invoices } = props.properties[0];
   const { business_name } = props.properties[0].business;
 
-  let newInvNo = invoices[0].inv_no + 1;
+  let newInvNo = invoices[0] != undefined ? invoices[0].inv_no + 1 : 1;
   console.log(props);
 
 

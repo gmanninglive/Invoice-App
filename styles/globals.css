@@ -9,7 +9,8 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-family: 'Roboto', sans-serif;
-    @apply w-full h-screen flex justify-center;
+    @apply w-full h-screen flex justify-start md:justify-center;
+    max-width: 100vw;
   }
   h1 {@apply font-bold text-3xl;
   }
@@ -19,22 +20,26 @@
   }
 
   body {
-    @apply antialiased text-gray-900 bg-gray-100;
+    @apply antialiased text-gray-900;
   }
   input{
     @apply p-2;
   }
+  tr:last-child td:first-child { @apply rounded-bl-xl }
+  tr:last-child td:last-child { @apply rounded-br-xl }
 }
 @layer components {
   .page {
+    max-width: 100%;
     width: 210mm;
     height: 297mm;
+    page-break-after: always;
   }
   .page-wrapper{
-    @apply antialiased text-gray-900 bg-gray-100 flex items-center justify-center relative;
+    @apply antialiased text-gray-900 bg-gray-200 flex items-center justify-start  relative ;
   }
   .label{
-    @apply mt-2;
+    @apply bg-white w-full  flex items-center px-2 rounded-md;
   }
   .invoice_list{
     grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr 3fr;

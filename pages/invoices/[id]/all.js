@@ -7,10 +7,9 @@ import Link from "next/link";
 import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
 import projection from "../../../utils/projection.json";
-import { formatDate, formatPrice, getBgColor} from "../../../utils/format";
+import { formatDate, formatPrice, getBgColor, daysDue } from "../../../utils/format";
 import DropdownMenu from "components/common/Menu";
-import InvoiceTabs from "components/common/Tabs";
-
+import InvoiceTabs from "components/common/InvoiceTabs";
 
 const CustomerDetails = (props) => {
   const { user, isLoading } = useUser();
@@ -18,7 +17,7 @@ const CustomerDetails = (props) => {
   const { id } = router.query;
   const { invoices, customers } = props.properties[0];
   const { business_name } = props.properties[0].business;
-  
+
   if (!user) {
     return (
       <div style={{ color: "#555", textAlign: "center" }}>
@@ -26,11 +25,16 @@ const CustomerDetails = (props) => {
       </div>
     );
   }
+  let overdue = [];
+  for (let i = 0; i < invoices.length; i++) {
+    if (daysDue(invoices[i].due_date).slice(0, 7) == "Overdue")
+      overdue.push(invoices[i]);
+  }
 
   return (
     <>
-    <div className="pb-20 w-full">
-      <div className="flex items-center justify-between bg-white py-4 px-2">
+      <div className="pb-20 xl:pb-0 w-full">
+        <div className="flex items-center justify-between bg-white py-4 px-2">
           <h1>Invoices</h1>
           <Link href={`/invoices/${id}/add`}>
             <a
@@ -42,12 +46,10 @@ const CustomerDetails = (props) => {
               Add
             </a>
           </Link>
-          
         </div>
-        <InvoiceTabs invoices={invoices} id={id} />
-        
+        <InvoiceTabs invoices={invoices} id={id} overdue={overdue} />
       </div>
-  </>
+    </>
   );
 };
 
