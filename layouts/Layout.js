@@ -3,8 +3,9 @@ import { useUser } from "@auth0/nextjs-auth0";
 
 import MobileMenu from "../components/menu/MobileMenu";
 
-export default function Layout({ children }) {
+export default function Layout({ children }, props) {
   const { user, isLoading } = useUser();
+  console.log(children.props.properties[1].type);
   
   if (!user){
     return (
@@ -17,7 +18,7 @@ export default function Layout({ children }) {
       </div>
     );
   }
-  else if (children.type.name == "Invoice"){
+  else if (children.props.properties[1].type == "invoice"){
       return (
         <div className="max-w-screen">
         {children}

@@ -156,6 +156,7 @@ export async function getServerSideProps(context) {
     .toArray();
 
   const properties = JSON.parse(JSON.stringify(data));
+  properties.push({"type": "invoice" })
   console.log(properties);
 
   return {
