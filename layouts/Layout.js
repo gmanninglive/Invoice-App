@@ -17,7 +17,7 @@ export default function Layout({ children }) {
       </div>
     );
   }
-  if (children.type.name == "Invoice"){
+  else if (children.type.name == "Invoice"){
       return (
         <div className="max-w-screen">
         {children}
