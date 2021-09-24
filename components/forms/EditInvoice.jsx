@@ -65,8 +65,8 @@ export default function EditInvoice(props) {
       <Formik
         initialValues={{
           customer: JSON.stringify(customer),
-          inv_date: inv_date,
-          due_date: due_date,
+          inv_date: new Date(inv_date),
+          due_date: new Date(due_date),
           inv_no: inv_no,
           line_items: line_items,
         }}
