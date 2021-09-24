@@ -5,7 +5,7 @@ import MobileMenu from "../components/menu/MobileMenu";
 
 export default function Layout({ children }, props) {
   const { user, isLoading } = useUser();
-  console.log(children.props.properties[1].type);
+  
   
   if (!user){
     return (
@@ -18,7 +18,7 @@ export default function Layout({ children }, props) {
       </div>
     );
   }
-  else if (children.props.properties[1].type == "invoice"){
+  else if (children.props.properties && children.props.properties[1].type == "invoice"){
       return (
         <div className="max-w-screen">
         {children}

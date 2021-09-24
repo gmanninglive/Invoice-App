@@ -87,10 +87,14 @@ export async function getServerSideProps(context) {
       },
     ])
     .toArray();
+    let properties = [];
+    properties.push({})
+    properties.push({"type": "page" })
 
   return {
     props: {
       monthlySales: JSON.parse(JSON.stringify(montlySales)),
+      properties,
     },
   };
 }

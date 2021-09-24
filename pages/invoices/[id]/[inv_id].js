@@ -70,7 +70,7 @@ export async function getServerSideProps(context) {
     .toArray();
 
   const properties = JSON.parse(JSON.stringify(data));
-  console.log(properties);
+  properties.push({"type": "page" });
 
   return {
     props: { properties },
