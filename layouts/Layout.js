@@ -30,7 +30,7 @@ export default function Layout({ children }, props) {
       <>
         <div className="w-screen min-h-screen flex justify-center bg-gradient-to-bl from-blue-100 via-blue-300 to-blue-500">
         <div className="absolute top-0 w-full bg-white p-10 shadow-md"></div>
-          <div className="w-full h-full lg:w-9/12 2xl:w-7/12 flex flex-col relative  ">
+          <div className="w-full h-full lg:w-9/12 2xl:w-7/12 flex flex-col relative pb-20 px-2  ">
             {children}
           </div>
           <MobileMenu user={user} id={user.sub.slice(6)} />

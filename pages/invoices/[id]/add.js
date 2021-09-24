@@ -7,6 +7,7 @@ import { connectToDatabase } from "../../../db/mongodb";
 import SideBar from "../../../components/sidebar/Sidebar";
 import projection from "../../../utils/projection.json";
 import NewInvoice from "../../../components/forms/NewInvoice";
+import Header from "components/header/Header";
 
 const CustomerDetails = (props) => {
   const { user, isLoading } = useUser();
@@ -18,7 +19,6 @@ const CustomerDetails = (props) => {
   let newInvNo = invoices[0] != undefined ? invoices[0].inv_no + 1 : 1;
   console.log(props);
 
-
   if (!user) {
     return (
       <div style={{ color: "#555", textAlign: "center" }}>
@@ -26,21 +26,12 @@ const CustomerDetails = (props) => {
       </div>
     );
   }
-  
 
   return (
-    <div className="pb-20">
-        <button
-          className="absolute top-0 right-0 mx-auto rounded-xl border-2 py-2 px-4"
-          type="button"
-          onClick={() => router.back()}
-        >
-          Back
-        </button>
-        
-        <h1>Add New Invoice</h1>
-        <NewInvoice url={id} customers={customers} inv_no={newInvNo} />
-      </div>
+    <>
+      <Header title="Add New Invoice" back={true} />
+      <NewInvoice url={id} customers={customers} inv_no={newInvNo} />
+    </>
   );
 };
 
@@ -51,28 +42,28 @@ export async function getServerSideProps(context) {
   const { id } = context.query;
 
   const data = await db
-  .collection("users")
-  .aggregate([
-    {
-      $match: { _id: ObjectId(id) },
-    },
-    {
-      $project: {
-        business: 1,
-        customers: 1,
-        invoices: {
-          $filter: {
-            input: "$invoices",
-            as: "invoice",
-            cond: { $eq: ["$$invoice.inv_no", { $max: "$invoices.inv_no" }] },
+    .collection("users")
+    .aggregate([
+      {
+        $match: { _id: ObjectId(id) },
+      },
+      {
+        $project: {
+          business: 1,
+          customers: 1,
+          invoices: {
+            $filter: {
+              input: "$invoices",
+              as: "invoice",
+              cond: { $eq: ["$$invoice.inv_no", { $max: "$invoices.inv_no" }] },
+            },
           },
         },
       },
-    },
-  ])
-  .toArray();
+    ])
+    .toArray();
   const properties = JSON.parse(JSON.stringify(data));
-  properties.push({"type": "page" });
+  properties.push({ type: "page" });
 
   return {
     props: { properties },

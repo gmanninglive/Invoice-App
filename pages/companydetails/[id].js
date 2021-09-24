@@ -4,8 +4,7 @@ import { useUser } from "@auth0/nextjs-auth0";
 import { ObjectId } from "bson";
 
 import { connectToDatabase } from "../../db/mongodb";
-import SideBar from "../../components/sidebar/Sidebar";
-
+import Header from "components/header/Header";
 
 const CompanyDetails = (props) => {
   const {
@@ -61,13 +60,13 @@ const CompanyDetails = (props) => {
   }
 
   return (
-
-      <div className="pb-20 ">
-        <div className="w-full py-6 px-2">
-        <h1>Settings</h1>
-        <div className="rounded-xl bg-white/[0.5] p-2 mt-10">
-        <form className="rounded-xl grid grid-cols-2 gap-x-1 gap-y-1 " onSubmit={handleSubmit}>
-          
+    <>
+      <Header title="Settings" />
+      <div className="rounded-xl bg-white/[0.5] p-2">
+        <form
+          className="rounded-xl grid grid-cols-2 gap-x-1 gap-y-1 "
+          onSubmit={handleSubmit}
+        >
           <h3 className="col-span-2">Business Details</h3>
           <label className="label" htmlFor="business_name">
             Business Name
@@ -79,7 +78,7 @@ const CompanyDetails = (props) => {
             defaultValue={business_name && business_name}
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
-          
+
           <label className="label" htmlFor="add_l1">
             Address Line 1
           </label>
@@ -197,9 +196,8 @@ const CompanyDetails = (props) => {
             Save
           </button>
         </form>
-        </div>
-        </div>
       </div>
+    </>
   );
 };
 
@@ -215,7 +213,7 @@ export async function getServerSideProps(context) {
     .toArray();
 
   const properties = JSON.parse(JSON.stringify(data));
-  properties.push({"type": "page" })
+  properties.push({ type: "page" });
 
   return {
     props: { properties },

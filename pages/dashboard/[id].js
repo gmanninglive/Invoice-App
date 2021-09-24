@@ -3,14 +3,11 @@
 import { ObjectId } from "bson";
 
 import { connectToDatabase } from "../../db/mongodb";
-import SideBar from "../../components/sidebar/Sidebar";
-import projection from "../../utils/projection.json";
 import VerticalBar from "../../components/charts/Sales";
-import LineChart from "../../components/charts/Outstanding";
-import { Fragment } from "react";
+import Header from "components/header/Header";
 
 const IndexId = (props) => {
-  console.log(props);
+  // console.log(props);
   const { monthlySales } = props;
 
   function getBestMonth() {
@@ -41,10 +38,8 @@ const IndexId = (props) => {
 
   return (
     <>
-      <div className="inline-flex justify-start py-6">
-        <h1>Dashboard</h1>
-      </div>
-      <div className="w-full my-6 grid bg-white rounded-xl">
+      <Header title="Dashboard" />
+      <div className="w-full mt-2 grid bg-white rounded-xl">
         <div className="max-w-screen px-2 xl:w-1/2 xl:mx-auto">
           <VerticalBar sales={monthlySales} />
         </div>
@@ -97,12 +92,4 @@ export async function getServerSideProps(context) {
       properties,
     },
   };
-}
-
-{
-  /* <SideBar
-            user={user}
-            id={user.sub.slice(6)}
-            business_name={business_name}
-          /> */
 }

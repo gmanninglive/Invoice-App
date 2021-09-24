@@ -39,7 +39,7 @@
     @apply antialiased text-gray-900 bg-gray-200 flex items-center justify-start  relative ;
   }
   .label{
-    @apply bg-white w-full  flex items-center px-2 rounded-md;
+    @apply w-full  flex items-center px-2 rounded-md;
   }
   .invoice_list{
     grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr 3fr;

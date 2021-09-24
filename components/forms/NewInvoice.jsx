@@ -8,16 +8,15 @@ import { formatPrice, subtotalSum, vatSum } from "../../utils/format";
 import { DatePicker } from "../common/DatePicker";
 
 // TODO Add subtotal / vat / total calculator with onchange from form
-export default function NewInvoice({ url, customers, inv_no }) {
+export default function NewInvoice({ url, customers, inv_no, invoices }) {
   const router = useRouter();
   const inv_id = ObjectId();
 
   async function handleSubmit(values) {
     let subtotal = subtotalSum(values.line_items);
-    let vat = vatSum(values.line_items) ;
-    let total = 
-      (subtotalSum(values.line_items) + vatSum(values.line_items));
-    console.log(subtotal, vat, total)
+    let vat = vatSum(values.line_items);
+    let total = subtotalSum(values.line_items) + vatSum(values.line_items);
+    console.log(subtotal, vat, total);
     const body = {
       inv_id: inv_id,
       inv_no: values.inv_no,
@@ -44,7 +43,7 @@ export default function NewInvoice({ url, customers, inv_no }) {
   let dateDue = new Date().setDate(dateToday.getDate() + 7);
 
   return (
-    <div>
+    <div className="max-w-full">
       <Formik
         initialValues={{
           customer: {
@@ -83,39 +82,38 @@ export default function NewInvoice({ url, customers, inv_no }) {
         }}
       >
         {({ values }) => (
-          
-          <Form className="grid grid-cols-1 mt-6">
-            <div className="border-2 rounded-md p-4" >
+          <Form className="grid grid-cols-1 ">
+            <div className="border-2 rounded-md  p-2">
               <div className="grid">
-            {/* Customer Select */}
-            <label className="label" htmlFor="customer">
-              Customer
-            </label>
-            <Field component="select" name="customer">
-              <option value="" />
-              {customers.map((customer) => {
-                return (
-                  <option
-                    key={customer.cust_id}
-                    value={JSON.stringify(customer)}
-                  >
-                    {" "}
-                    {customer.first_name} {customer.sur_name}{" "}
-                  </option>
-                );
-              })}
-            </Field>
-            </div>
-            <div className="flex justify-start gap-x-2 my-2">
-              <DatePicker name="inv_date" label="Select the Invoice Date" />
-              <DatePicker name="due_date" label="Select the Date Due" />
-              <div className="grid">
-                <label className="" htmlFor="inv_no">
-                  Set Invoice Number
+                {/* Customer Select */}
+                <label className="label" htmlFor="customer">
+                  Customer
                 </label>
-                <Field name="inv_no" type="number" className="rounded-md" />
+                <Field component="select" name="customer" className="p-2 rounded-md bg-white">
+                  <option value="" />
+                  {customers.map((customer) => {
+                    return (
+                      <option
+                        key={customer.cust_id}
+                        value={JSON.stringify(customer)}
+                      >
+                        {" "}
+                        {customer.first_name} {customer.sur_name}{" "}
+                      </option>
+                    );
+                  })}
+                </Field>
               </div>
-            </div>
+              <div className="flex justify-start flex-wrap gap-x-2 my-2">
+                <DatePicker name="inv_date" label="Select the Invoice Date" />
+                <DatePicker name="due_date" label="Select the Date Due" />
+                <div className="grid">
+                  <label className="" htmlFor="inv_no">
+                    Set Invoice Number
+                  </label>
+                  <Field name="inv_no" type="number" className="rounded-md" />
+                </div>
+              </div>
             </div>
             <FieldArray // Line Items Array
               name="line_items"
@@ -124,13 +122,13 @@ export default function NewInvoice({ url, customers, inv_no }) {
                   {values.line_items && values.line_items.length > 0 ? (
                     values.line_items.map((line_item, index) => (
                       <div
-                        className="border-2 rounded-md my-4 relative "
+                        className="border-2 rounded-md my-4 relative  "
                         key={index}
                       >
-                        <div className="flex justify-between flex-grow">
-                          <div className="col-span-1 w-1/2">
+                        <div className="flex justify-between flex-grow p-2">
+                          <div className="w-1/2">
                             <label
-                              className="label m-4 w-1/2"
+                              className="label"
                               htmlFor={`line_items.${index}.line_name`}
                             >
                               Line Item Name
@@ -138,11 +136,11 @@ export default function NewInvoice({ url, customers, inv_no }) {
                             <Field
                               name={`line_items.${index}.line_name`}
                               type="text"
-                              className="m-4 rounded-md"
+                              className=" rounded-md w-full"
                             />
                             <br />
                             <label
-                              className="label m-4"
+                              className="label "
                               htmlFor={`line_items.${index}.description`}
                             >
                               Description
@@ -150,11 +148,11 @@ export default function NewInvoice({ url, customers, inv_no }) {
                             <Field
                               name={`line_items.${index}.description`}
                               component="textarea"
-                              className="w-full ml-4 my-4 p-2 rounded-md"
+                              className="w-full  p-2 rounded-md"
                             />
                           </div>
 
-                          <div className="m-4 flex justify-around flex-wrap w-1/2">
+                          <div className="flex justify-start ml-2 gap-x-2 flex-wrap w-1/2">
                             <span>
                               <label
                                 className="label "
@@ -166,7 +164,7 @@ export default function NewInvoice({ url, customers, inv_no }) {
                               <Field
                                 name={`line_items.${index}.price`}
                                 type="number"
-                                className="h-10 w-20 mx-2 rounded-md"
+                                className="h-10 w-20 rounded-md"
                               />
                             </span>
                             <span>
@@ -179,7 +177,7 @@ export default function NewInvoice({ url, customers, inv_no }) {
                               <Field
                                 name={`line_items.${index}.quantity`}
                                 type="number"
-                                className="h-10 w-16 mx-2 rounded-md"
+                                className="h-10 w-16 rounded-md"
                               />
                             </span>
                             <span>
@@ -192,7 +190,7 @@ export default function NewInvoice({ url, customers, inv_no }) {
                               <Field
                                 name={`line_items.${index}.vat`}
                                 component="select"
-                                className="h-10 w-16 mx-2 rounded-md"
+                                className="h-10 w-16 rounded-md bg-white"
                               >
                                 <option value={0}>0%</option>
                                 <option value={0.05}>5%</option>
@@ -210,7 +208,9 @@ export default function NewInvoice({ url, customers, inv_no }) {
                               <button
                                 type="button"
                                 className="text-blue-600"
-                                onClick={() => arrayHelpers.insert(index, line_item)} // Insert an empty line_item object at a position
+                                onClick={() =>
+                                  arrayHelpers.insert(index, line_item)
+                                } // Insert an empty line_item object at a position
                               >
                                 <HiPlus size={32} />
                               </button>
@@ -230,16 +230,19 @@ export default function NewInvoice({ url, customers, inv_no }) {
                       <HiPlus size={36} />
                     </button>
                   )}
-                  <div className="border-2 rounded-md p-4 my-4 grid" >
-                  <label className="" htmlFor="notes">
+                  <div className="border-2 rounded-md p-2 my-4 grid">
+                    <label className="" htmlFor="notes">
                       Notes
                     </label>
-                    <Field className="w-1/2 p-2" name="notes" component="textarea" placeholder="Enter any notes to be displayed in the footer" />
-                  
-                    </div>
-                    
+                    <Field
+                      className="w-full p-2 rounded-md"
+                      name="notes"
+                      component="textarea"
+                      placeholder="Enter any notes to be displayed in the footer"
+                    />
+                  </div>
+
                   <div>
-                    
                     <button
                       type="submit"
                       className="rounded-xl border-2 py-2 px-4 text-white bg-blue-600 hover:bg-blue-900 ease-in-out"

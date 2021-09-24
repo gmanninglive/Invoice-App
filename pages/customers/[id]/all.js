@@ -11,34 +11,13 @@ import SideBar from "../../../components/sidebar/Sidebar";
 import { getBgColor } from "../../../utils/format";
 
 import { sortCustomers } from "../../../utils/sort";
+import Header from "components/header/Header";
 
 const CustomerDetails = (props) => {
   const { user, isLoading } = useUser();
   const router = useRouter();
   const [{ customers }, setCustomers] = useState(props.properties[0]);
   const { id } = router.query;
-
-  console.log(props.properties[0]);
-
-  // State to sort customers by and change colour of selected sort term
-  const [sortBy, setSortBy] = useState("first_name");
-  const sortFirst =
-    sortBy.slice(0, 5) === "first" ? "border-blue-600" : "border-gray-200";
-  const sortSur =
-    sortBy.slice(0, 3) === "sur" ? "border-blue-600" : "border-gray-200";
-
-  // Sorting handlers
-  function handleSortByFirst() {
-    if (sortBy == "first_nameASC") setSortBy("first_nameDESC");
-    else setSortBy("first_nameASC");
-  }
-  function handleSortBySur() {
-    if (sortBy == "sur_nameASC") setSortBy("sur_nameDESC");
-    else setSortBy("sur_nameASC");
-  }
-
-  // Call Sorting Function
-  sortCustomers(sortBy, customers);
 
   // Async Search function
   async function handleSearch(e) {
@@ -73,21 +52,9 @@ const CustomerDetails = (props) => {
 
   return (
     <>
-      <div className="w-full pb-20 px-2">
-        <div className="flex items-center justify-between py-6">
-          <h1>Customers</h1>
-
-          <Link href={`/customers/${id}/add`}>
-            <a
-              className="ml-10 font-bold
-            rounded-xl border-2 
-            py-2 px-6 bg-green-500 
-            hover:bg-green-300"
-            >
-              Add
-            </a>
-          </Link>
-        </div>
+      
+        <Header title={"Customers"} url={`/customers/${id}/add`} linkName="Add" />
+        
         <div className="w-full p-1 bg-blue-900/20 rounded-xl shadow-md ">
           <form onSubmit={handleSearch} className="relative">
             <input
@@ -131,7 +98,6 @@ const CustomerDetails = (props) => {
             );
           })}
         </div>
-      </div>
     </>
   );
 };

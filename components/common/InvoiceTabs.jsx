@@ -15,7 +15,7 @@ export default function InvoiceTabs({ invoices, id, overdue}) {
   });
  
   return (
-    <div className="w-full px-2 py-6 sm:px-0 bg-transparent ">
+    <div className="w-full sm:px-0 bg-transparent ">
       <Tab.Group>
         <Tab.List className="flex p-1 space-x-1 bg-blue-900/20 rounded-xl shadow-md ">
           {Object.keys(categories).map((category) => (

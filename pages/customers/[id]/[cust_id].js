@@ -4,14 +4,14 @@ import { useUser } from "@auth0/nextjs-auth0";
 import { ObjectId } from "bson";
 
 import { connectToDatabase } from "../../../db/mongodb";
-import SideBar from "../../../components/sidebar/Sidebar";
 
-import EditCustomer from "../../../components/forms/EditCustomer";
+import EditCustomer from "components/forms/EditCustomer";
+import Header from "components/header/Header";
 
 const CustomerDetails = (props) => {
   const { customers } = props.properties[0];
   const { business_name } = props.properties[0].business;
-  
+
   const { user, isLoading } = useUser();
   const router = useRouter();
   const { id, cust_id } = router.query;
@@ -25,19 +25,10 @@ const CustomerDetails = (props) => {
   }
 
   return (
-    <div className="pb-20">
-      
-        <button
-          className="absolute top-0 right-0 mx-auto rounded-xl border-2 py-2 px-4"
-          type="button"
-          onClick={() => router.back()}
-        >
-          Back
-        </button>
-        <div className="flex items-center"></div>
-        <h1>Edit Customer</h1>
-        <EditCustomer customers={customers} url={`${id}/${cust_id}`} />
-      </div>
+    <>
+      <Header title="Edit Customer" back={true} />
+      <EditCustomer customers={customers} url={`${id}/${cust_id}`} />
+    </>
   );
 };
 
@@ -68,7 +59,7 @@ export async function getServerSideProps(context) {
     .toArray();
 
   const properties = JSON.parse(JSON.stringify(data));
-  properties.push({"type": "page" })
+  properties.push({ type: "page" });
 
   return {
     props: { properties },

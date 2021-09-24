@@ -31,7 +31,7 @@ const options = {
 };
 
 const VerticalBar = ({sales}) => {
-  console.log(sales)
+  // console.log(sales)
 
   let totals = [0,0,0,0,0,0,0,0,0,0,0,0,];
   for ( let i = 0; i < sales.length; i++){
