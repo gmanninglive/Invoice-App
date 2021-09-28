@@ -15,7 +15,9 @@ First Set up a mongodb Atlas Database and an Auth0 account.
 Follow their tutorials to get started.
 
 Then make a .env file with the following:
+
 -------------------------------------------
+
 AUTH_SECRET=****
 PORT=3000
 
@@ -27,6 +29,7 @@ AUTH0_CLIENT_SECRET=****
 
 MONGODB_URI=****
 DB_NAME=****
+
 -------------------------------------------
 
 Then run the development server:
