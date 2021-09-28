@@ -69,7 +69,7 @@ export default function Faq() {
                 />
               </Disclosure.Button>
               <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
-                Vie was created by myself George Manning, I'm a software developer from Brighton, UK. <br/> You can checkout my other work on my <a href="https://gmanningdev.uk">Portfolio.</a>
+                Vie was created by myself George Manning, I&apos;m a software developer from Brighton, UK. <br/> You can checkout my other work on my <a href="https://gmanningdev.uk">Portfolio.</a>
               </Disclosure.Panel>
             </>
           )}
