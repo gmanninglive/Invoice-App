@@ -3,11 +3,11 @@ import { Fragment, useRef, useEffect } from "react";
 import Image from "next/image";
 import { ObjectId } from "bson";
 
-import { formatDate, formatPrice, getBgColor, formatLineItem } from "../../../../../utils/format";
-import { connectToDatabase } from "../../../../../db/mongodb";
+import { formatDate, formatPrice, getBgColor, formatLineItem } from "utils/format";
+import { connectToDatabase } from "db/mongodb";
 import { useUser } from "@auth0/nextjs-auth0";
 import { useRouter } from "next/router";
-import { GeneratePdf } from "../../../../../components/GeneratePdf";
+import Loader from "components/common/Loader";
 
 export default function Invoice(props) {
 
@@ -22,7 +22,7 @@ export default function Invoice(props) {
 
   useEffect(() => {
     if(user && (print == "true")){
-      GeneratePdf(ref);
+      window.print();
     }
   }, [user])
   
@@ -48,7 +48,7 @@ export default function Invoice(props) {
     },
   };
   
-  if(!user) return ( <div>Loading...</div>);
+  if(!user) return ( <Loader />);
 
   return (
     <div className="page-wrapper" ref={ref}>

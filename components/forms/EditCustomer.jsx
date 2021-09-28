@@ -73,9 +73,9 @@ export default function EditCustomer(props) {
 
   return (
     <>
-      <form className="grid grid-cols-2 gap-y-1 my-6" onSubmit={handleSubmit}>
+      <form className="grid grid-cols-2 gap-y-1 my-6 p-2 bg-white rounded-xl" onSubmit={handleSubmit}>
         <label className="label" htmlFor="first_name">
-          Business Name
+          First Name
         </label>
         <input
           name="first_name"
@@ -84,7 +84,7 @@ export default function EditCustomer(props) {
           defaultValue={first_name && first_name}
         />
         <label className="label" htmlFor="sur_name">
-          Business Name
+          SurName
         </label>
         <input
           name="sur_name"

@@ -2,8 +2,8 @@
 
 import { ObjectId } from "bson";
 
-import { connectToDatabase } from "../../db/mongodb";
-import VerticalBar from "../../components/charts/Sales";
+import { connectToDatabase } from "db/mongodb";
+import VerticalBar from "components/charts/Sales";
 import Header from "components/header/Header";
 
 const IndexId = (props) => {

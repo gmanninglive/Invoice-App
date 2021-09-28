@@ -1,26 +1,17 @@
 import { useRouter } from "next/router";
-import { useUser } from "@auth0/nextjs-auth0";
 import { ObjectId } from "bson";
 
-import { connectToDatabase } from "../../../db/mongodb";
-import Header from "../../../components/header/Header";
-import projection from "../../../utils/projection.json";
-import { daysDue } from "../../../utils/format";
-import InvoiceTabs from "components/common/InvoiceTabs";
+import { connectToDatabase } from "db/mongodb";
+import Header from "components/header/Header";
+import projection from "utils/projection.json";
+import { daysDue } from "utils/format";
+import InvoiceTabs from "components/invoices/InvoiceTabs";
 
 const CustomerDetails = (props) => {
-  const { user, isLoading } = useUser();
   const router = useRouter();
   const { id } = router.query;
   const { invoices } = props.properties[0];
 
-  if (!user) {
-    return (
-      <div style={{ color: "#555", textAlign: "center" }}>
-        Please sign in to post
-      </div>
-    );
-  }
   let overdue = [];
   for (let i = 0; i < invoices.length; i++) {
     if (daysDue(invoices[i].due_date).slice(0, 7) == "Overdue")

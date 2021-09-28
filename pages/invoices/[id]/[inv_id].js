@@ -3,28 +3,18 @@ import { useUser } from "@auth0/nextjs-auth0";
 
 import { ObjectId } from "bson";
 
-import { connectToDatabase } from "../../../db/mongodb";
-import SideBar from "../../../components/sidebar/Sidebar";
+import { connectToDatabase } from "db/mongodb";
 
-import EditInvoice from "../../../components/forms/EditInvoice";
+import EditInvoice from "components/forms/EditInvoice";
 import Header from "components/header/Header";
+
 
 const InvoiceDetails = (props) => {
   const { invoices, customers } = props.properties[0];
-  const { business_name } = props.properties[0].business;
-
-  const { user, isLoading } = useUser();
+  
   const router = useRouter();
   const { id, inv_id } = router.query;
-
-  if (!user) {
-    return (
-      <div style={{ color: "#555", textAlign: "center" }}>
-        Please sign in to post
-      </div>
-    );
-  }
-
+  
   return (
     <>
       <Header title="Edit Invoice" back={true} />

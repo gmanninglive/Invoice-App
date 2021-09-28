@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Tab } from "@headlessui/react";
 import Link from "next/link";
-import DropdownMenu from "./Menu";
-import { getBgColor, daysDue, formatDate, formatPrice } from "../../utils/format";
+import DropdownMenu from "./InvoiceDropdown";
+import LinkButton from "components/common/LinkButton";
+import { getBgColor, daysDue, formatDate, formatPrice } from "utils/format";
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
@@ -15,7 +16,7 @@ export default function InvoiceTabs({ invoices, id, overdue}) {
   });
  
   return (
-    <div className="w-full sm:px-0 bg-transparent ">
+    <>
       <Tab.Group>
         <Tab.List className="flex p-1 space-x-1 bg-blue-900/20 rounded-xl shadow-md ">
           {Object.keys(categories).map((category) => (
@@ -40,7 +41,7 @@ export default function InvoiceTabs({ invoices, id, overdue}) {
             <Tab.Panel
               key={idx}
               className={classNames(
-                " rounded-xl bg-white",
+                " rounded-xl  bg-white",
                 // "focus:outline-none focus:ring-2 ring-offset-2 ring-offset-blue-400 ring-white ring-opacity-60"
               )}
             >
@@ -51,7 +52,7 @@ export default function InvoiceTabs({ invoices, id, overdue}) {
                       <li
                         className={`${getBgColor(
                           index,
-                          "bg-blue-200 bg-opacity-50"
+                          "bg-blue-900/20"
                         )} ${contents[index + 1] == undefined ? "rounded-b-xl" : ""} relative w-full inline-flex flex-wrap justify-between  py-6 items-center`}
                         key={invoice.inv_id}
                       >
@@ -79,13 +80,7 @@ export default function InvoiceTabs({ invoices, id, overdue}) {
                             </p>
                           </li>
                           <li className="grid items-center gap-y-6">
-                            <Link
-                              href={`/invoices/${id}/${invoice.inv_id}/false/preview`}
-                            >
-                              <a className="z-0 inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-                                View
-                              </a>
-                            </Link>
+                          <LinkButton url={`/invoices/${id}/${invoice.inv_id}/false/preview`} text="View" style="w-full" />
 
                             <DropdownMenu
                               edit={`/invoices/${id}/${invoice.inv_id}`}
@@ -108,6 +103,6 @@ export default function InvoiceTabs({ invoices, id, overdue}) {
           ))}
         </Tab.Panels>
       </Tab.Group>
-    </div>
+    </>
   );
 }

@@ -1,20 +1,17 @@
 import { useRouter } from "next/router";
-import { useUser } from "@auth0/nextjs-auth0";
 import { useState, useEffect } from "react";
 import { ObjectId } from "bson";
 import Link from "next/link";
 import {FiSearch} from 'react-icons/fi'
 
-import { connectToDatabase } from "../../../db/mongodb";
-import SideBar from "../../../components/sidebar/Sidebar";
+import { connectToDatabase } from "db/mongodb";
+import { getBgColor } from "utils/format";
 
-import { getBgColor } from "../../../utils/format";
-
-import { sortCustomers } from "../../../utils/sort";
 import Header from "components/header/Header";
+import LinkButton from "components/common/LinkButton";
 
 const CustomerDetails = (props) => {
-  const { user, isLoading } = useUser();
+
   const router = useRouter();
   const [{ customers }, setCustomers] = useState(props.properties[0]);
   const { id } = router.query;
@@ -42,14 +39,6 @@ const CustomerDetails = (props) => {
     } else setCustomers(props.properties[0]);
   }
 
-  if (!user) {
-    return (
-      <div style={{ color: "#555", textAlign: "center" }}>
-        Please sign in to post
-      </div>
-    );
-  }
-
   return (
     <>
       
@@ -72,7 +61,7 @@ const CustomerDetails = (props) => {
               <ul
                 className={`w-full inline-flex flex-wrap justify-between items-center
                 py-6 px-6
-                ${getBgColor(index, "bg-blue-100")} 
+                ${getBgColor(index, "bg-blue-900/20")} 
                 ${customers[index + 1] == undefined ? "rounded-b-xl" : ""} `}
                 key={customer.cust_id}
               >
@@ -88,11 +77,7 @@ const CustomerDetails = (props) => {
                 </li>
 
                 <li className="flex-col justify-center">
-                  <Link href={`/customers/${id}/${customer.cust_id}`}>
-                    <a className="rounded-xl border-2 py-2 px-4 text-center m-0 bg-white">
-                      Edit
-                    </a>
-                  </Link>
+                  <LinkButton url={`/customers/${id}/${customer.cust_id}`} text="Edit" />
                 </li>
               </ul>
             );

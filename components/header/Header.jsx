@@ -1,36 +1,24 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
+import BackButton from "components/common/BackButton";
+import LinkButton from "components/common/LinkButton";
 
-export default function Header({ title, url, linkName, back }) {
-
-  const router = useRouter();
+export default function Header({ title, url, linkName, back, login }) {
 
   return (
-    
-      <div className="flex items-center justify-between py-6">
-        <h1>{title}</h1>
-        {url && (
-          <Link href={url}>
-            <a
-              className="ml-10 font-bold
-          rounded-xl border-2 
-          py-2 px-6 bg-green-500 
-          hover:bg-green-300"
-            >
-              {linkName}
-            </a>
-          </Link>
-        )}
-        {!!back &&
-        <button
-          className="rounded-xl border-2 py-2 px-4"
-          type="button"
-          onClick={() => router.back()}
+    <div className="flex items-center justify-between py-6">
+      <h1>{title}</h1>
+      {url && <LinkButton url={url} text={linkName} />}
+      {!!back && <BackButton />}
+      {login && (
+        <a
+          href={"/api/auth/login"}
+          className="ml-10 font-bold
+          rounded-md border-2 
+          py-2 px-6 text-white bg-black/[0.8] 
+          hover:bg-black/[0.2]"
         >
-          Back
-        </button>
-        }   
-    
+          Log in
+        </a>
+      )}
     </div>
   );
 }

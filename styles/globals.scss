@@ -1,4 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -8,10 +10,13 @@
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-family: 'Roboto', sans-serif;
-    @apply w-full h-screen flex justify-start md:justify-center;
+    font-family: 'Inter','Roboto',system-ui,-apple-system,BlinkMacSystemFont,Segoe UI, Helvetica Neue ,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
+    
+    @apply w-full h-screen flex justify-start md:justify-center text-gray-900;
     max-width: 100vw;
+    
   }
+  
   h1 {@apply font-bold text-3xl;
   }
   h2 {@apply font-bold text-2xl;
@@ -19,9 +24,6 @@
   h3 {@apply font-bold text-lg;
   }
 
-  body {
-    @apply antialiased text-gray-900;
-  }
   input{
     @apply p-2;
   }
@@ -41,17 +43,11 @@
   .label{
     @apply w-full  flex items-center px-2 rounded-md;
   }
-  .invoice_list{
-    grid-template-columns: 1fr 1fr 1fr 2fr 1fr 1fr 3fr;
-
-  }
+  
   .invoice_items{
     grid-template-columns: 1.5fr 3.5fr 1fr 1.25fr 0.75fr 1fr;
 
   }
-  .customer_list{
-    grid-template-columns: 0.75fr 0.75fr 1.25fr 0.75fr 2fr 1fr 0.5fr 1fr;
-
-  }
+  
   
 }

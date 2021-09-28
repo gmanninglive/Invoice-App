@@ -1,9 +1,7 @@
 import { useRouter } from "next/router";
-import { useUser } from "@auth0/nextjs-auth0";
-
 import { ObjectId } from "bson";
 
-import { connectToDatabase } from "../../db/mongodb";
+import { connectToDatabase } from "db/mongodb";
 import Header from "components/header/Header";
 
 const CompanyDetails = (props) => {
@@ -23,15 +21,6 @@ const CompanyDetails = (props) => {
 
   const router = useRouter();
   const { id } = router.query;
-  const { user, isLoading } = useUser();
-
-  if (!user) {
-    return (
-      <div style={{ color: "#555", textAlign: "center" }}>
-        Please sign in to post
-      </div>
-    );
-  }
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -62,9 +51,9 @@ const CompanyDetails = (props) => {
   return (
     <>
       <Header title="Settings" />
-      <div className="rounded-xl bg-white/[0.5] p-2">
+      <div className="rounded-xl bg-white p-2">
         <form
-          className="rounded-xl grid grid-cols-2 gap-x-1 gap-y-1 "
+          className="rounded-xl grid grid-cols-2 gap-x-1 gap-y-2 "
           onSubmit={handleSubmit}
         >
           <h3 className="col-span-2">Business Details</h3>

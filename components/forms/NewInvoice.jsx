@@ -43,7 +43,7 @@ export default function NewInvoice({ url, customers, inv_no, invoices }) {
   let dateDue = new Date().setDate(dateToday.getDate() + 7);
 
   return (
-    <div className="max-w-full">
+    <div className="max-w-full ">
       <Formik
         initialValues={{
           customer: {
