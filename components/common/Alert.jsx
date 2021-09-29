@@ -3,8 +3,12 @@ export default function Alert() {
   const [isOpen, setIsOpen] = useState(true);
 
   return (
+    /**
+     * Bug in mobile for Alert margins.
+     * Current fix is right margin 2 on mobile. 0 on medium screen+
+    */
     <div
-      className={`${isOpen ? "absolute" : "hidden"} bottom-2 mr-2 my-6`}
+      className={`${isOpen ? "absolute" : "hidden"} bottom-2 mr-2 md:mr-0 my-6`}
       role="alert"
     >
 

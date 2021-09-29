@@ -38,17 +38,20 @@ export default function Index() {
         <div className="w-full h-full flex flex-col justify-center ">
         {/**
          * Working with bg-clip-text Is causing issues on ios safari.
+         * 
+         * It works fine in chrome dev tools when set to iphone, but in deployment text is not visible
+         * 
          * When using Mix blend it works
          * 
          * Currently set color to black on mobile
          */}
           <div
-            className="leading-none text-6xl md:text-7xl font-extrabold 
-            text-black/[0.8] md:text-transparent
-            bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text drop-shadow-md"
+            className="-mt-14 md:mt-0"
+        
           >
-            <ul>
+            <ul className=" leading-none text-6xl md:text-7xl font-extrabold text-transparent
+            bg-gradient-to-bl from-pink-400 to-white 
+            bg-clip-text drop-shadow-md" >
               <li>Estimate</li>
               <li>Invoice</li>
               <li>Payment</li>
