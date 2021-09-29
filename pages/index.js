@@ -42,7 +42,7 @@ export default function Index() {
             className="leading-none text-6xl md:text-7xl font-extrabold 
             text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text pb-4 filter drop-shadow-md"
+            bg-clip-text pb-4 drop-shadow-md"
           >
             <ul>
               <li>Estimate</li>
