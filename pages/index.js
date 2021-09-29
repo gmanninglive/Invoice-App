@@ -10,7 +10,7 @@ import invoicesPreview from "public/images/invoice-preview.png";
 import Loader from "components/common/Loader";
 import Footer from "components/footer/Footer";
 import Header from "components/header/Header";
-import Alert from 'components/common/Alert'
+import Alert from "components/common/Alert";
 
 export default function Index() {
   // Login auth0 User
@@ -33,16 +33,16 @@ export default function Index() {
   return (
     <>
       <div className="h-screen px-4 relative">
-      
-      
+        <div className="flex justify-center">
+          <Alert />
+        </div>
         <Header login={user ? false : true} title="Vie" />
         <div className="h-full flex flex-col justify-center items-start">
-          
           <span
             className="leading-none text-6xl md:text-7xl font-extrabold 
             text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text pb-4 drop-shadow-md"
+            bg-clip-text pb-4 "
           >
             <ul>
               <li>Estimate</li>
@@ -66,7 +66,8 @@ export default function Index() {
           <h1 className="text-indigo-100 pb-4">What is Vie?</h1>
           <p>
             Vie is a cloud based invoicing application, created with the
-            freelancer in mind. To make billing and customer organisation simple.
+            freelancer in mind. To make billing and customer organisation
+            simple.
           </p>
         </span>
         <Slide direction="right" className="pb-4 my-4 ml-10 place-self-end">
