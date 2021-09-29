@@ -36,12 +36,16 @@ export default function Index() {
         
         <Header login={user ? false : true} title="Vie" />
         <div className="max-w-screen w-full h-full grid items-center ">
-      
+        {/**
+         * Working with bg-clip-text Is causing issues on some browsers.
+         * When using Mix blend it works
+         * 
+         */}
           <div
             className="leading-none text-6xl md:text-7xl font-extrabold 
             text-transparent
-            bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text mix-blend-color-burn drop-shadow-md"
+            bg-gradient-to-bl from-black-400 to-white 
+            bg-clip-text drop-shadow-md"
           >
             <ul>
               <li>Estimate</li>
