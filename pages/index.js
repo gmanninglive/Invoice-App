@@ -35,12 +35,8 @@ export default function Index() {
       <div className="h-screen px-4 relative">
         
         <Header login={user ? false : true} title="Vie" />
-        <div className="h-full flex flex-col justify-center ">
-        <ul>
-              <li>Estimate</li>
-              <li>Invoice</li>
-              <li>Payment</li>
-            </ul>
+        <div className="w-full h-full flex flex-col justify-center ">
+        
           
           <div
             className="leading-none text-6xl md:text-7xl font-extrabold 
@@ -65,7 +61,7 @@ export default function Index() {
             ...Vive la vie
           </div>
         </div>
-        <div className="z-10 flex justify-center m-4">
+        <div className="flex justify-center m-4">
             <Alert />
           </div>
       </div>
