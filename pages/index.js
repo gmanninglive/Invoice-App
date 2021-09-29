@@ -41,9 +41,9 @@ export default function Index() {
          * 
          * It works fine in chrome dev tools when set to iphone, but in deployment text is not visible
          * 
-         * When using Mix blend it works
-         * 
          * Currently set color to black on mobile
+         * 
+         * Bug is with wrapping <ul> with styling - Fixed by adding styling direct to <ul>
          */}
           <div
             className="-mt-14 md:mt-0"
@@ -52,7 +52,9 @@ export default function Index() {
             <ul className=" leading-none text-6xl md:text-7xl font-extrabold text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
             bg-clip-text drop-shadow-md" >
-              <li>Estimate</li>
+              <li className=" leading-none text-6xl md:text-7xl font-extrabold text-transparent
+            bg-gradient-to-bl from-pink-400 to-white 
+            bg-clip-text drop-shadow-md">Estimate</li>
               <li>Invoice</li>
               <li>Payment</li>
             </ul>
