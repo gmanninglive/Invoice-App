@@ -33,8 +33,7 @@ export default function Index() {
   return (
     <>
       <div className="h-screen px-4 relative">
-        
-      <Alert />
+      
       
         <Header login={user ? false : true} title="Vie" />
         <div className="h-full flex flex-col justify-center items-start">
