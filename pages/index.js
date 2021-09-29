@@ -42,10 +42,11 @@ export default function Index() {
          * 
          */}
           <div
-            className="leading-none text-6xl md:text-7xl font-extrabold 
-            text-transparent
-            bg-gradient-to-bl from-black-400 to-white 
-            bg-clip-text drop-shadow-md"
+            className="leading-none text-6xl md:text-7xl
+            font-extrabold 
+            text-transparent 
+           bg-gradient-to-bl from-red-500 to-white
+           bg-clip-text mix-blend-color-burn"
           >
             <ul>
               <li>Estimate</li>
