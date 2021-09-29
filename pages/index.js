@@ -33,14 +33,14 @@ export default function Index() {
   return (
     <>
       <div className="h-screen px-4 relative">
-        <div className="flex justify-center">
+        
       <Alert />
-      </div>
+      
         <Header login={user ? false : true} title="Vie" />
         <div className="h-full flex flex-col justify-center items-start">
           
           <span
-            className="leading-none text-7xl font-extrabold 
+            className="leading-none text-6xl md:text-7xl font-extrabold 
             text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
             bg-clip-text pb-4 filter drop-shadow-md"
