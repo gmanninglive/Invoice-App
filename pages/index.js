@@ -35,7 +35,7 @@ export default function Index() {
       <div className="h-screen px-4 relative">
         
         <Header login={user ? false : true} title="Vie" />
-        <div className="h-full grid items-center ">
+        <div className="w-full h-full grid items-center ">
         
           
           <div
