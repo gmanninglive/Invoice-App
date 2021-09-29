@@ -39,7 +39,7 @@ export default function Index() {
       
           <div
             className="leading-none text-6xl md:text-7xl font-extrabold 
-            text-transparent
+            text-black
             bg-gradient-to-bl from-pink-400 to-white 
             bg-clip-text mix-blend-normal drop-shadow-md"
           >
