@@ -8,7 +8,7 @@ import Slide from "components/motion/Slide";
 import invoicesAll from "public/images/invoices-all.png";
 import invoicesPreview from "public/images/invoice-preview.png";
 import Loader from "components/common/Loader";
-import Footer from "components/footer/Footer";
+
 import Header from "components/header/Header";
 import Alert from "components/common/Alert";
 
@@ -22,7 +22,7 @@ export default function Index() {
     if (user) {
       router.replace(`/dashboard/${user.sub.slice(6)}`);
     }
-  }, [user]);
+  }, [user, router]);
 
   // If user is logged in display Loader component while routing to dashboard
   if (user) {
@@ -33,32 +33,41 @@ export default function Index() {
   return (
     <>
       <div className="h-screen px-4 relative">
-        <div className="flex justify-center">
-          <Alert />
-        </div>
+        
         <Header login={user ? false : true} title="Vie" />
-        <div className="h-full flex flex-col justify-center items-start">
-          <span
-            className="leading-none text-6xl md:text-7xl font-extrabold 
-            text-transparent
+        <div className="w-full h-full flex flex-col justify-center ">
+        {/**
+         * Working with bg-clip-text Is causing issues on ios safari.
+         * 
+         * It works fine in chrome dev tools mobile, but in deployment text is not visible
+         * 
+         * Bug is with wrapping <ul> with styling - Fixed by removing <ul> and adding line breaks.
+         */}
+          <div
+            className="-mt-14 md:mt-0 leading-none text-6xl md:text-7xl font-extrabold text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text pb-4 "
+            bg-clip-text drop-shadow-md"
+        
           >
-            <ul>
-              <li>Estimate</li>
-              <li>Invoice</li>
-              <li>Payment</li>
-            </ul>
-          </span>
-          <span
-            className="text-5xl leading-loose 
-              place-self-end text-transparent 
+            Estimate <br/>
+            Invoice <br />
+            Payment
+            
+          </div>
+          <div
+            className="
+            place-self-end
+            text-5xl leading-loose 
+               text-transparent 
               bg-gradient-to-bl from-red-500 to-white
               bg-clip-text mix-blend-color-burn"
           >
             ...Vive la vie
-          </span>
+          </div>
         </div>
+        <div className="flex justify-center">
+            <Alert />
+          </div>
       </div>
 
       <div className=" overflow-hidden flex flex-col relative ">
