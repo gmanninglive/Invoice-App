@@ -49,7 +49,7 @@ const CustomerDetails = (props) => {
             <input
               name="search"
               type="text"
-              placeholder="Search"
+              placeholder="Search by First or Last Name"
               className="bg-white rounded-xl focus:outline-none w-full"
             />
             <button type="submit" className="absolute right-2 top-2 bottom-2"><FiSearch size="24"/></button>

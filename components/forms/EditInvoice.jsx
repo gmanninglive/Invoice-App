@@ -11,7 +11,7 @@ import { formatPrice, subtotalSum, vatSum } from "../../utils/format";
 
 export default function EditInvoice(props) {
   const router = useRouter();
-  const { inv_id, inv_date, due_date, customer, line_items, inv_no } =
+  const { inv_id, inv_date, due_date, customer, line_items, inv_no, notes } =
     props.invoices[0];
   const customers = props.customers;
 
@@ -69,6 +69,7 @@ export default function EditInvoice(props) {
           due_date: new Date(due_date),
           inv_no: inv_no,
           line_items: line_items,
+          notes: notes,
         }}
         onSubmit={(values) => {
           handleSubmit(values);

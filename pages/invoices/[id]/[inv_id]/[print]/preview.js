@@ -18,7 +18,7 @@ export default function Invoice(props) {
   
   const { invoices, business } = props.properties[0];
   let b = business;
-  const { line_items, sub_total, vat_total, total_due, inv_date, due_date, inv_no} = invoices[0]
+  const { line_items, sub_total, vat_total, total_due, inv_date, due_date, inv_no, notes} = invoices[0]
 
   useEffect(() => {
     if(user && (print == "true")){
@@ -52,7 +52,7 @@ export default function Invoice(props) {
 
   return (
     <div className="page-wrapper" ref={ref}>
-      <div className="bg-white page shadow-md relative ">
+      <div className="bg-white page shadow-md relative flex flex-col ">
         <header className="relative p-6 flex justify-between mb-5 bg-blue-900 text-gray-100 shadow-md">
           <div>
             <h1 className="text-4xl">Invoice</h1>
@@ -118,7 +118,9 @@ export default function Invoice(props) {
           <div>{`VAT ${data.currency}${formatPrice(vat_total)}`}</div>
           <div className="font-bold text-2xl w-40">{`Total Due ${data.currency}${formatPrice(total_due)}`}</div>
         </div>
-
+            <div className="my-auto px-6">
+              {notes && `Notes: ${notes}`}
+            </div>
         <footer className="absolute bottom-5 w-full border-t-2">
           <div className="flex justify-evenly">
             <div>Company Number: {b.ltd_no}</div>

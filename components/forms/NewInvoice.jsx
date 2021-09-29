@@ -72,7 +72,7 @@ export default function NewInvoice({ url, customers, inv_no, invoices }) {
             },
           ],
 
-          nots: "",
+          notes: "",
           sub_total: 0,
           vat_total: 0,
           total_due: 0,

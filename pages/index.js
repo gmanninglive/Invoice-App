@@ -10,6 +10,7 @@ import invoicesPreview from "public/images/invoice-preview.png";
 import Loader from "components/common/Loader";
 import Footer from "components/footer/Footer";
 import Header from "components/header/Header";
+import Alert from 'components/common/Alert'
 
 export default function Index() {
   // Login auth0 User
@@ -31,9 +32,13 @@ export default function Index() {
   // If user not logged in display landing page
   return (
     <>
-      <div className="h-screen px-4">
+      <div className="h-screen px-4 relative">
+        <div className="flex justify-center">
+      <Alert />
+      </div>
         <Header login={user ? false : true} title="Vie" />
         <div className="h-full flex flex-col justify-center items-start">
+          
           <span
             className="leading-none text-7xl font-extrabold 
             text-transparent
