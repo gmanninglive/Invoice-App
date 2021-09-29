@@ -39,11 +39,9 @@ export default function Index() {
         {/**
          * Working with bg-clip-text Is causing issues on ios safari.
          * 
-         * It works fine in chrome dev tools when set to iphone, but in deployment text is not visible
+         * It works fine in chrome dev tools mobile, but in deployment text is not visible
          * 
-         * Currently set color to black on mobile
-         * 
-         * Bug is with wrapping <ul> with styling - Fixed by adding styling direct to <li>
+         * Bug is with wrapping <ul> with styling - Fixed by removing <ul> and adding line breaks.
          */}
           <div
             className="-mt-14 md:mt-0 leading-none text-6xl md:text-7xl font-extrabold text-transparent
@@ -52,7 +50,7 @@ export default function Index() {
         
           >
             Estimate <br/>
-            Invoice<br />
+            Invoice <br />
             Payment
             
           </div>
