@@ -34,30 +34,31 @@ export default function Index() {
     <>
       <div className="h-screen px-4 relative">
         <div className="flex justify-center">
-          <Alert />
-        </div>
+            <Alert />
+          </div>
         <Header login={user ? false : true} title="Vie" />
-        <div className="h-full flex flex-col justify-center items-start">
-          <span
+        <div className="h-full flex flex-col justify-center ">
+          
+          <div
             className="leading-none text-6xl md:text-7xl font-extrabold 
             text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text pb-4 "
+            bg-clip-text pb-4 drop-shadow-md"
           >
             <ul>
               <li>Estimate</li>
               <li>Invoice</li>
               <li>Payment</li>
             </ul>
-          </span>
-          <span
+          </div>
+          <div
             className="text-5xl leading-loose 
-              place-self-end text-transparent 
+               text-transparent 
               bg-gradient-to-bl from-red-500 to-white
               bg-clip-text mix-blend-color-burn"
           >
             ...Vive la vie
-          </span>
+          </div>
         </div>
       </div>
 
