@@ -43,21 +43,18 @@ export default function Index() {
          * 
          * Currently set color to black on mobile
          * 
-         * Bug is with wrapping <ul> with styling - Fixed by adding styling direct to <ul>
+         * Bug is with wrapping <ul> with styling - Fixed by adding styling direct to <li>
          */}
           <div
-            className="-mt-14 md:mt-0"
+            className="-mt-14 md:mt-0 leading-none text-6xl md:text-7xl font-extrabold text-transparent
+            bg-gradient-to-bl from-pink-400 to-white 
+            bg-clip-text drop-shadow-md"
         
           >
-            <ul className=" leading-none text-6xl md:text-7xl font-extrabold text-transparent
-            bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text drop-shadow-md" >
-              <li className=" leading-none text-6xl md:text-7xl font-extrabold text-transparent
-            bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text drop-shadow-md">Estimate</li>
-              <li>Invoice</li>
-              <li>Payment</li>
-            </ul>
+            Estimate <br/>
+            Invoice<br />
+            Payment
+            
           </div>
           <div
             className="
