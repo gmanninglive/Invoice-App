@@ -35,24 +35,13 @@ export default function Index() {
       <div className="h-screen px-4 relative">
         
         <Header login={user ? false : true} title="Vie" />
-        <div className="max-w-screen w-full h-full grid items-center ">
-        Testing
-
-        <div
-            className="leading-none text-6xl md:text-7xl font-extrabold 
-            text-black drop-shadow-md"
-          >
-            <ul>
-              <li>Estimate</li>
-              <li>Invoice</li>
-              <li>Payment</li>
-            </ul>
-            </div>
+        <div className="max-w-screen w-full h-full flex flex-col justify-center ">
+      
           <div
             className="leading-none text-6xl md:text-7xl font-extrabold 
             text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text drop-shadow-md"
+            bg-clip-text mix-blend-normal drop-shadow-md"
           >
             <ul>
               <li>Estimate</li>
@@ -62,7 +51,7 @@ export default function Index() {
           </div>
           <div
             className="
-            justify-self-end
+            place-self-end
             text-5xl leading-loose 
                text-transparent 
               bg-gradient-to-bl from-red-500 to-white
