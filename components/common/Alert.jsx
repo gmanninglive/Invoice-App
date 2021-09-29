@@ -4,9 +4,10 @@ export default function Alert() {
 
   return (
     <div
-      className={`${isOpen ? "absolute" : "hidden"} bottom-2 my-4`}
+      className={`${isOpen ? "absolute" : "hidden"} bottom-2 mr-2 my-6`}
       role="alert"
     >
+
       <div
         className="bg-green-100 border border-green-400 text-green-700 
         px-4 py-3 rounded relative

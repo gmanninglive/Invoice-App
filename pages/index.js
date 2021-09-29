@@ -8,7 +8,7 @@ import Slide from "components/motion/Slide";
 import invoicesAll from "public/images/invoices-all.png";
 import invoicesPreview from "public/images/invoice-preview.png";
 import Loader from "components/common/Loader";
-import Footer from "components/footer/Footer";
+
 import Header from "components/header/Header";
 import Alert from "components/common/Alert";
 
@@ -22,7 +22,7 @@ export default function Index() {
     if (user) {
       router.replace(`/dashboard/${user.sub.slice(6)}`);
     }
-  }, [user]);
+  }, [user, router]);
 
   // If user is logged in display Loader component while routing to dashboard
   if (user) {
@@ -35,9 +35,19 @@ export default function Index() {
       <div className="h-screen px-4 relative">
         
         <Header login={user ? false : true} title="Vie" />
-        <div className="w-full h-full grid items-center ">
-        
-          
+        <div className="max-w-screen w-full h-full grid items-center ">
+        Testing
+
+        <div
+            className="leading-none text-6xl md:text-7xl font-extrabold 
+            text-black drop-shadow-md"
+          >
+            <ul>
+              <li>Estimate</li>
+              <li>Invoice</li>
+              <li>Payment</li>
+            </ul>
+            </div>
           <div
             className="leading-none text-6xl md:text-7xl font-extrabold 
             text-transparent
