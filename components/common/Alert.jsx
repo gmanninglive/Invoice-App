@@ -4,7 +4,7 @@ export default function Alert() {
 
   return (
     <div
-      className={`${isOpen ? "absolute" : "hidden"} bottom-2 m-2`}
+      className={`${isOpen ? "absolute" : "hidden"} bottom-2 m-4`}
       role="alert"
     >
       <div

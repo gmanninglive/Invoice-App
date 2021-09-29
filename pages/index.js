@@ -33,11 +33,14 @@ export default function Index() {
   return (
     <>
       <div className="h-screen px-4 relative">
-        <div className="flex justify-center">
-            <Alert />
-          </div>
+        
         <Header login={user ? false : true} title="Vie" />
         <div className="h-full flex flex-col justify-center ">
+        <ul>
+              <li>Estimate</li>
+              <li>Invoice</li>
+              <li>Payment</li>
+            </ul>
           
           <div
             className="leading-none text-6xl md:text-7xl font-extrabold 
@@ -52,7 +55,9 @@ export default function Index() {
             </ul>
           </div>
           <div
-            className="text-5xl leading-loose 
+            className="
+            place-self-end
+            text-5xl leading-loose 
                text-transparent 
               bg-gradient-to-bl from-red-500 to-white
               bg-clip-text mix-blend-color-burn"
@@ -60,6 +65,9 @@ export default function Index() {
             ...Vive la vie
           </div>
         </div>
+        <div className="z-10 flex justify-center m-4">
+            <Alert />
+          </div>
       </div>
 
       <div className=" overflow-hidden flex flex-col relative ">
