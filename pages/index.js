@@ -35,18 +35,18 @@ export default function Index() {
       <div className="h-screen px-4 relative">
         
         <Header login={user ? false : true} title="Vie" />
-        <div className="max-w-screen w-full h-full grid items-center ">
+        <div className="w-full h-full flex flex-col justify-center ">
         {/**
          * Working with bg-clip-text Is causing issues on ios safari.
          * When using Mix blend it works
          * 
+         * Currently set color to black on mobile
          */}
           <div
-            className="leading-none text-6xl md:text-7xl
-       
-          text-transparent 
-           bg-gradient-to-bl from-red-500 to-white
-           bg-clip-text mix-blend-color-burn"
+            className="leading-none text-6xl md:text-7xl font-extrabold 
+            text-black/[0.8] md:text-transparent
+            bg-gradient-to-bl from-pink-400 to-white 
+            bg-clip-text drop-shadow-md"
           >
             <ul>
               <li>Estimate</li>
@@ -56,7 +56,7 @@ export default function Index() {
           </div>
           <div
             className="
-            justify-self-end
+            place-self-end
             text-5xl leading-loose 
                text-transparent 
               bg-gradient-to-bl from-red-500 to-white
@@ -65,7 +65,7 @@ export default function Index() {
             ...Vive la vie
           </div>
         </div>
-        <div className="flex justify-center m-4">
+        <div className="flex justify-center">
             <Alert />
           </div>
       </div>
