@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { ObjectId } from "bson";
 
@@ -5,17 +6,24 @@ import { connectToDatabase } from "db/mongodb";
 import NewInvoice from "components/forms/NewInvoice";
 import Header from "components/header/Header";
 
-
 const CustomerDetails = (props) => {
   const router = useRouter();
   const { id } = router.query;
   const { customers, invoices } = props.properties[0];
-  
+
   let newInvNo = invoices[0] != undefined ? invoices[0].inv_no + 1 : 1;
   console.log(props);
 
   return (
     <>
+      <Head>
+        <title>Vie | The Invoicing App for Freelancers</title>
+        <meta
+          name="description"
+          content="A free to use cloud based invoicing app for freelancers and small businesses"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Header title="Add New Invoice" back={true} />
       <NewInvoice url={id} customers={customers} inv_no={newInvNo} />
     </>

@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { ObjectId } from "bson";
 
@@ -20,6 +21,14 @@ const CustomerDetails = (props) => {
 
   return (
     <>
+      <Head>
+        <title>Vie | The Invoicing App for Freelancers</title>
+        <meta
+          name="description"
+          content="A free to use cloud based invoicing app for freelancers and small businesses"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Header title="Invoices" url={`/invoices/${id}/add`} linkName="Add" />
 
       <InvoiceTabs invoices={invoices} id={id} overdue={overdue} />

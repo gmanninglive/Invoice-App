@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { useUser } from "@auth0/nextjs-auth0";
 import Image from "next/image";
+import Head from "next/head";
 import Slide from "components/motion/Slide";
 
 import invoicesAll from "public/images/invoices-all.png";
@@ -32,30 +33,32 @@ export default function Index() {
   // If user not logged in display landing page
   return (
     <>
+      <Head>
+        <title>Vie | The Invoicing App for Freelancers</title>
+        <meta
+          name="description"
+          content="A free to use cloud based invoicing app for freelancers and small businesses"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <div className="h-screen px-4 relative">
-        
         <Header login={user ? false : true} title="Vie" />
         <div className="w-full h-full flex flex-col justify-center ">
-        {/**
-         * Working with bg-clip-text Is causing issues on ios safari.
-         * 
-         * It works fine in chrome dev tools mobile, but in deployment text is not visible
-         * 
-         * Bug is with wrapping <ul> with styling - Fixed by removing <ul> and adding line breaks.
-         */}
+          {/**
+           * Working with bg-clip-text Is causing issues on ios safari.
+           *
+           * It works fine in chrome dev tools mobile, but in deployment text is not visible
+           *
+           * Bug is with wrapping <ul> with styling - Fixed by removing <ul> and adding line breaks.
+           */}
           <div
             className="-mt-14 md:mt-0 leading-none text-6xl md:text-7xl font-extrabold text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
             bg-clip-text drop-shadow-purple"
-        
           >
-            
-            Estimate <br/>
+            Estimate <br />
             Invoice <br />
             Payment
-            
-            
-            
           </div>
           <div
             className="
@@ -69,8 +72,8 @@ export default function Index() {
           </div>
         </div>
         <div className="flex justify-center">
-            <Alert />
-          </div>
+          <Alert />
+        </div>
       </div>
 
       <div className=" overflow-hidden flex flex-col relative ">

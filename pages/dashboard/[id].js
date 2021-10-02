@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
-
+import Head from 'next/head'
 import { ObjectId } from "bson";
 
 import { connectToDatabase } from "db/mongodb";
@@ -38,16 +38,27 @@ const IndexId = (props) => {
 
   return (
     <>
+      <Head>
+        <title>Vie | The Invoicing App for Freelancers</title>
+        <meta
+          name="description"
+          content="A free to use cloud based invoicing app for freelancers and small businesses"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Header title="Dashboard" />
       <div className="w-full mt-2 grid bg-white rounded-xl">
         <div className="max-w-screen px-2 xl:w-1/2 xl:mx-auto">
           <VerticalBar sales={monthlySales} />
         </div>
         <div className="inline-flex justify-center items-center py-4 px-2">
-          <h2>{`Your most profitable month is:
-            ${monthlySales.length > 0
-              ? getBestMonth()
-              : "Start creating invoices to generate insights"}
+          <h2>
+            {`Your most profitable month is:
+            ${
+              monthlySales.length > 0
+                ? getBestMonth()
+                : "Start creating invoices to generate insights"
+            }
             `}
           </h2>
         </div>
@@ -82,9 +93,9 @@ export async function getServerSideProps(context) {
       },
     ])
     .toArray();
-    let properties = [];
-    properties.push({})
-    properties.push({"type": "page" })
+  let properties = [];
+  properties.push({});
+  properties.push({ type: "page" });
 
   return {
     props: {

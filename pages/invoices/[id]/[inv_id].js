@@ -6,17 +6,25 @@ import { ObjectId } from "bson";
 import { connectToDatabase } from "db/mongodb";
 
 import EditInvoice from "components/forms/EditInvoice";
+import Head from "next/head";
 import Header from "components/header/Header";
-
 
 const InvoiceDetails = (props) => {
   const { invoices, customers } = props.properties[0];
-  
+
   const router = useRouter();
   const { id, inv_id } = router.query;
-  
+
   return (
     <>
+      <Head>
+        <title>Vie | The Invoicing App for Freelancers</title>
+        <meta
+          name="description"
+          content="A free to use cloud based invoicing app for freelancers and small businesses"
+        />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <Header title="Edit Invoice" back={true} />
       <EditInvoice
         customers={customers}
