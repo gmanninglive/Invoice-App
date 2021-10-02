@@ -43,14 +43,16 @@ export default function NewCustomer(props){
           name="first_name"
           type="text"
           placeholder={"Firstname"}
+          required
     
         />
         <label className="label" htmlFor="sur_name">
-          SurName</label>
+          Surname</label>
         <input
           name="sur_name"
           type="text"
           placeholder={"Surname"}
+          required
 
         />
 

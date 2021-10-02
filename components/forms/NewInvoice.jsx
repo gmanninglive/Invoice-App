@@ -89,7 +89,9 @@ export default function NewInvoice({ url, customers, inv_no, invoices }) {
                 <label className="label" htmlFor="customer">
                   Customer
                 </label>
-                <Field component="select" name="customer" className="p-2 rounded-md bg-white">
+                <Field component="select" name="customer" 
+                className="p-2 rounded-md bg-white"
+                required>
                   <option value="" />
                   {customers.map((customer) => {
                     return (
@@ -137,6 +139,7 @@ export default function NewInvoice({ url, customers, inv_no, invoices }) {
                               name={`line_items.${index}.line_name`}
                               type="text"
                               className=" rounded-md w-full"
+                              required
                             />
                             <br />
                             <label

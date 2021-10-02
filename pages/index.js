@@ -46,12 +46,15 @@ export default function Index() {
           <div
             className="-mt-14 md:mt-0 leading-none text-6xl md:text-7xl font-extrabold text-transparent
             bg-gradient-to-bl from-pink-400 to-white 
-            bg-clip-text drop-shadow-md"
+            bg-clip-text drop-shadow-purple"
         
           >
+            
             Estimate <br/>
             Invoice <br />
             Payment
+            
+            
             
           </div>
           <div
