@@ -91,7 +91,7 @@ export default function Invoice(props) {
           </div>
 
           <div>
-            <Image src={user.picture} alt="Logo" width="50px" height="50px" />
+            <Image src={b.logo} alt="Logo" width="50px" height="50px" />
             <p>{b.business_name}</p>
             <p>{b.add_l1}</p>
             <p>{b.add_l2}</p>

@@ -1,6 +1,8 @@
 import { useRouter } from "next/router";
 import { ObjectId } from "bson";
-
+import Image from "next/image";
+import axios from "axios";
+import { AiOutlineFileImage } from "react-icons/ai";
 import { connectToDatabase } from "db/mongodb";
 import Header from "components/header/Header";
 
@@ -17,35 +19,83 @@ const CompanyDetails = (props) => {
     mobile,
     vat_no,
     ltd_no,
+    logo,
   } = props.properties[0].business;
-
+  console.log(logo);
   const router = useRouter();
   const { id } = router.query;
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const body = {
-      business: {
-        business_name: e.currentTarget.business_name.value,
-        add_l1: e.currentTarget.add_l1.value,
-        add_l2: e.currentTarget.add_l2.value,
-        add_l3: e.currentTarget.add_l3.value,
-        add_l4: e.currentTarget.add_l4.value,
-        postcode: e.currentTarget.postcode.value,
-        email: e.currentTarget.email.value,
-        landline: e.currentTarget.landline.value,
-        mobile: e.currentTarget.mobile.value,
-        vat_no: e.currentTarget.vat_no.value,
-        ltd_no: e.currentTarget.ltd_no.value,
-      },
+    const file = e.currentTarget.logo.files[0];
+    const values = {
+      business_name: e.target.business_name.value,
+      add_l1: e.target.add_l1.value,
+      add_l2: e.target.add_l2.value,
+      add_l3: e.target.add_l3.value,
+      add_l4: e.target.add_l4.value,
+      postcode: e.target.postcode.value,
+      email: e.target.email.value,
+      landline: e.target.landline.value,
+      mobile: e.target.mobile.value,
+      vat_no: e.target.vat_no.value,
+      ltd_no: e.target.ltd_no.value,
+      logo: logo,
     };
+    // If new logo file added fetch s3 url and upload
+    if (!!file) {
+      const getUrl = axios({
+        method: "GET",
+        url: `/api/business/${id}/url`,
+      })
+        .then((res) => {
+          return res.data;
+        })
+        .catch((err) => {
+          throw err;
+        });
 
-    const res = await fetch(`/api/business/${id}`, {
+      const { url } = await getUrl;
+      console.log(file.name);
+
+      const upload = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Content-Disposition": `attachment; filename=${logo.name}`,
+        },
+        body: file,
+      });
+      const imageUrl = url.split("?")[0];
+
+      // Add logo url to values for database
+      Object.defineProperty(values, "logo", {
+        value: imageUrl,
+        writable: true,
+      });
+    }
+    // Append all values for database query
+    const formData = new FormData();
+    for (const key in values) {
+      formData.append(key, values[key]);
+    }
+
+    axios({
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    if (res.ok) console.log("OK");
+      url: `/api/business/${id}`,
+      data: formData,
+      config: {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      },
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        throw err;
+      });
   }
 
   return (
@@ -177,7 +227,20 @@ const CompanyDetails = (props) => {
             defaultValue={ltd_no && ltd_no}
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
-
+          <div className="col-span-2 w-full flex flex-col items-start">
+          <p>Logo</p>
+          <div className="w-20 h-20 relative flex justfiy-center items-start">
+          
+            <Image src={logo} width={100} height={100} alt="logo" className="rounded-md"/>
+          <label htmlFor="file" className="cursor-pointer z-9 text-transparent hover:text-black/[0.8] hover:bg-white/[0.5] transition ease-in-out absolute w-full h-full flex justify-center items-center  ">
+          <AiOutlineFileImage size={48} className=""/>
+            <input type="file" name="logo" className="absolute top-0 z-10 w-full h-full opacity-0 cursor-pointer">
+              
+            </input>
+            </label>
+    
+          </div>
+          </div>
           <button
             type="submit"
             className="col-span-2 rounded-xl border-2 py-2 px-4 hover:bg-gray-200 ease-in-out"
