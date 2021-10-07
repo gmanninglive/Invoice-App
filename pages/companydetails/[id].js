@@ -49,9 +49,9 @@ const CompanyDetails = (props) => {
         });
 
       const { url } = await getUrl;
-
+      console.log(url)
       // Upload put request to s3
-      await fetch(url, {
+      await fetch( url, {
         method: "PUT",
         headers: {
           "Content-Type": file.type,

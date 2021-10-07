@@ -22,6 +22,7 @@ if(req.method === "POST"){
   // Get Upload url promise
   await new Promise(async function (resolve, reject) {
          const url = await generateUploadURL(ext);
+         console.log(url)
          res.send({url});
          resolve();
          
