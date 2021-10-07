@@ -9,25 +9,16 @@ export default async function handler(req, res) {
   const collection = db.collection("users");
 
   await new Promise(function (resolve, reject) {
-    const form = new formidable.IncomingForm({
-      maxFileSize: Infinity,
-      keepExtensions: true,
-    });
+    const form = new formidable.IncomingForm();
     // ------ Formidable Parsing -------- //
-    form.parse(req, async function (err, fields, files) {
-      console.log(fields)
+    form.parse(req, async function (err, fields) {
       if (err) return reject(err);
       const business_details = { business: fields };
-      collection.updateOne(
-        myquery,
-        { $set: business_details },
-        (err, res) => {
-          if (err) console.log(err);
-          console.log("1 document updated");
-          console.log(res);
-        }
-      );
-      resolve({ fields, files });
+      collection.updateOne(myquery, { $set: business_details }).catch((err) => {
+        if (err) console.log(err);
+      });
+      res.status(200).send("1 document updated");
+      resolve();
     });
   });
 }

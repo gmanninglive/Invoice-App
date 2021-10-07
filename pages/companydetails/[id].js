@@ -29,6 +29,7 @@ const CompanyDetails = (props) => {
   const router = useRouter();
   const { id } = router.query;
 
+  // Logo State -- Updates when user uploads new logo to prevent refresh
   const [updatedlogo, setlogo] = useState(logo);
 
   // Function to update logo -- Gets signed AWS s3 URL then sends post request with image to URL
@@ -46,7 +47,6 @@ const CompanyDetails = (props) => {
         formData.append(key, value);
       });
 
-      console.log(url);
       // Upload put request to s3
       const upload = await fetch(url, {
         method: "POST",
@@ -81,7 +81,7 @@ const CompanyDetails = (props) => {
       method: "PUT",
       url: `/api/business/${id}/logo`,
       data: dbFormData,
-    }).catch((err) => {
+    }).then((res) => console.log("logo api response", res)).catch((err) => {
       console.log(err);
     });
   }
@@ -105,7 +105,7 @@ const CompanyDetails = (props) => {
       logo: updatedlogo,
     };
 
-    // // Append all values for database query
+    // Append all values for database query
     const formData = new FormData();
     for (const key in values) {
       formData.append(key, values[key]);
@@ -132,13 +132,13 @@ const CompanyDetails = (props) => {
   return (
     <>
       <Header title="Settings" />
-      <div className="rounded-xl bg-white p-2">
+      <div className="rounded-xl bg-white p-4">
         <form
-          className="rounded-xl grid grid-cols-2 gap-x-1 gap-y-2 "
+          className="rounded-xl grid grid-cols-2 gap-x-1 gap-y-2 items-center"
           onSubmit={handleSubmit}
         >
           <h3 className="col-span-2">Business Details</h3>
-          <label className="label" htmlFor="business_name">
+          <label htmlFor="business_name">
             Business Name
           </label>
           <input
@@ -149,7 +149,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="add_l1">
+          <label htmlFor="add_l1">
             Address Line 1
           </label>
           <input
@@ -160,7 +160,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="add_l2">
+          <label htmlFor="add_l2">
             Address Line 2
           </label>
           <input
@@ -171,7 +171,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="add_l3">
+          <label htmlFor="add_l3">
             Address Line 3
           </label>
           <input
@@ -182,7 +182,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="add_l4">
+          <label htmlFor="add_l4">
             Address Line 4
           </label>
           <input
@@ -193,7 +193,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="postcode">
+          <label htmlFor="postcode">
             Postcode
           </label>
           <input
@@ -204,7 +204,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="email">
+          <label htmlFor="email">
             Email Address
           </label>
           <input
@@ -215,7 +215,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="landline">
+          <label htmlFor="landline">
             Landline
           </label>
           <input
@@ -226,7 +226,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="mobile">
+          <label htmlFor="mobile">
             Mobile
           </label>
           <input
@@ -237,7 +237,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="vat_no">
+          <label htmlFor="vat_no">
             VAT Number
           </label>
           <input
@@ -248,7 +248,7 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
 
-          <label className="label" htmlFor="ltd_no">
+          <label htmlFor="ltd_no">
             LTD Number
           </label>
           <input
@@ -282,6 +282,7 @@ const CompanyDetails = (props) => {
                   className="absolute top-0 z-10 w-full h-full opacity-0 cursor-pointer"
                   title="Update Logo"
                   onChange={handleLogoChange}
+                  accept="image/png, image/jpeg"
                 />
               </label>
             </div>

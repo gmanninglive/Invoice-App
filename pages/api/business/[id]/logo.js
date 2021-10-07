@@ -15,20 +15,14 @@ export default async function handler(req, res) {
     });
     // ------ Formidable Parsing -------- //
     form.parse(req, async function (err, fields, files) {
-      console.log(fields)
       if (err) return reject(err);
       const business_details = { "business.logo": fields.logo };
-      collection.updateOne(
-        myquery,
-        { $set: business_details },
-        (err, res) => {
-          if (err) console.log(err);
-          console.log("1 document updated");
-          console.log(res);
-        }
-      );
-      resolve({ fields, files });
+      collection.updateOne(myquery, { $set: business_details }).catch((err) => {
+        if (err) console.log(err);
+      });
     });
+    res.status(200).send("1 document updated");
+    resolve();
   });
 }
 
