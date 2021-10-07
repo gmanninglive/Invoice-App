@@ -54,7 +54,7 @@ const CompanyDetails = (props) => {
       await fetch( url, {
         method: "PUT",
         headers: {
-          "Content-Type": file.type,
+          "Content-Type": "multipart/form-data",
           "Content-Disposition": `attachment; filename=${file.name}`,
         },
         body: file,
