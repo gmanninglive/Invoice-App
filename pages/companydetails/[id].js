@@ -51,15 +51,15 @@ const CompanyDetails = (props) => {
       const { url } = await getUrl;
 
       // Upload put request to s3
-      const upload = await fetch(url, {
+      await fetch(url, {
         method: "PUT",
         headers: {
           "Content-Type": file.type,
           "Content-Disposition": `attachment; filename=${file.name}`,
         },
         body: file,
-      });
-      console.log(upload.res)
+      }).then(res => console.log(res));
+      
       // Format AWS url
       const imageUrl = url.split("?")[0];
   
