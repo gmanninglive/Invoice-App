@@ -8,6 +8,8 @@ import { AiOutlineFileImage } from "react-icons/ai";
 import { connectToDatabase } from "db/mongodb";
 import Header from "components/header/Header";
 
+// TODO Possibly change mongodb set queries, currently logo update only sets logo. But text form sets all fields.
+// If the userbase expanded greatly this could increase costs with unnecessary writes
 // TODO Add s3 delete function when user changes logo
 const CompanyDetails = (props) => {
   const {
@@ -65,7 +67,7 @@ const CompanyDetails = (props) => {
       
       // Values for database update query
       const values = {
-        logo: imageUrl,
+        logo: updatedlogo,
       };
       
       // // Append all values for database query
@@ -73,10 +75,10 @@ const CompanyDetails = (props) => {
       for (const key in values) {
         formData.append(key, values[key]);
       }
-      // Axios PUT request to Mongodb on business ID route
+      // Axios PUT request to Mongodb on business details route
       axios({
         method: "PUT",
-        url: `/api/business/${id}`,
+        url: `/api/business/${id}/logo`,
         data: formData,
         config: {
           headers: {
@@ -89,7 +91,7 @@ const CompanyDetails = (props) => {
         });
     }
   }
-
+  // Handle submit of text form fields
   async function handleSubmit(e) {
     e.preventDefault();
     const values = {
@@ -104,6 +106,7 @@ const CompanyDetails = (props) => {
       mobile: e.target.mobile.value,
       vat_no: e.target.vat_no.value,
       ltd_no: e.target.ltd_no.value,
+      logo: updatedlogo,
     };
     
     // // Append all values for database query

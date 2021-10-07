@@ -17,7 +17,7 @@ export default async function handler(req, res) {
     form.parse(req, async function (err, fields, files) {
       console.log(fields)
       if (err) return reject(err);
-      const business_details = { business: fields };
+      const business_details = { "business.logo": fields.logo };
       collection.updateOne(
         myquery,
         { $set: business_details },
