@@ -59,6 +59,7 @@ const CompanyDetails = (props) => {
         },
         body: file,
       });
+      console.log(upload.res)
       // Format AWS url
       const imageUrl = url.split("?")[0];
   
