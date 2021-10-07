@@ -67,7 +67,7 @@ const CompanyDetails = (props) => {
       
       // Values for database update query
       const values = {
-        logo: updatedlogo,
+        logo: imageUrl,
       };
       
       // // Append all values for database query
