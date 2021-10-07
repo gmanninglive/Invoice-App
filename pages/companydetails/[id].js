@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import { useState } from "react";
 import { ObjectId } from "bson";
 import Image from "next/image";
 import axios from "axios";
@@ -6,13 +7,10 @@ import { AiOutlineFileImage } from "react-icons/ai";
 import { connectToDatabase } from "db/mongodb";
 import Header from "components/header/Header";
 
+// TODO Add s3 delete function when user changes logo
 const CompanyDetails = (props) => {
   const {
-    business_name,
-    add_l1,
-    add_l2,
-    add_l3,
-    add_l4,
+    business_name, add_l1, add_l2, add_l3, add_l4,
     postcode,
     email,
     landline,
@@ -21,13 +19,76 @@ const CompanyDetails = (props) => {
     ltd_no,
     logo,
   } = props.properties[0].business;
-  console.log(logo);
   const router = useRouter();
   const { id } = router.query;
 
+  const [updatedlogo, setlogo] = useState(logo)
+
+  // Function to update logo -- Gets signed AWS s3 URL then sends post request with image to URL
+  // Then sends put request to update database with URL
+  async function handleLogoChange(e){
+    const file = e.target.files[0];
+    const body = {"ext" :  `.${file.type.slice(6)}`}
+    // If new logo file added fetch s3 url and upload
+    if (!!file) {
+      // Get signed url from s3, valid for 60s
+      const getUrl = axios({
+        method: "POST",
+        url: `/api/business/gets3url`,
+        content: "application/json",
+        data: body,
+      })
+        .then((res) => {
+          return res.data;
+        })
+        .catch((err) => {
+          throw err;
+        });
+
+      const { url } = await getUrl;
+
+      // Upload put request to s3
+      const upload = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": file.type,
+          "Content-Disposition": `attachment; filename=${file.name}`,
+        },
+        body: file,
+      });
+      // Format AWS url
+      const imageUrl = url.split("?")[0];
+      console.log(imageUrl)
+      setlogo(imageUrl)
+      
+      const values = {
+        logo: file,
+      };
+      
+      // // Append all values for database query
+      const formData = new FormData();
+      for (const key in values) {
+        formData.append(key, values[key]);
+      }
+      // Axios PUT request to Mongodb on business ID route
+      axios({
+        method: "PUT",
+        url: `/api/business/${id}/logo`,
+        data: formData,
+        config: {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        },
+      })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
-    const file = e.currentTarget.logo.files[0];
     const values = {
       business_name: e.target.business_name.value,
       add_l1: e.target.add_l1.value,
@@ -40,49 +101,17 @@ const CompanyDetails = (props) => {
       mobile: e.target.mobile.value,
       vat_no: e.target.vat_no.value,
       ltd_no: e.target.ltd_no.value,
-      logo: logo,
     };
-    // If new logo file added fetch s3 url and upload
-    if (!!file) {
-      const getUrl = axios({
-        method: "GET",
-        url: `/api/business/${id}/url`,
-      })
-        .then((res) => {
-          return res.data;
-        })
-        .catch((err) => {
-          throw err;
-        });
-
-      const { url } = await getUrl;
-      console.log(file.name);
-
-      const upload = await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "multipart/form-data",
-          "Content-Disposition": `attachment; filename=${logo.name}`,
-        },
-        body: file,
-      });
-      const imageUrl = url.split("?")[0];
-
-      // Add logo url to values for database
-      Object.defineProperty(values, "logo", {
-        value: imageUrl,
-        writable: true,
-      });
-    }
-    // Append all values for database query
+    
+    // // Append all values for database query
     const formData = new FormData();
     for (const key in values) {
       formData.append(key, values[key]);
     }
-
+    // Axios PUT request to Mongodb on business ID route
     axios({
       method: "PUT",
-      url: `/api/business/${id}`,
+      url: `/api/business/${id}/logo`,
       data: formData,
       config: {
         headers: {
@@ -94,7 +123,7 @@ const CompanyDetails = (props) => {
         console.log(res);
       })
       .catch((err) => {
-        throw err;
+        console.log(err);
       });
   }
 
@@ -228,18 +257,31 @@ const CompanyDetails = (props) => {
             className="rounded-md bg-black/[0.12] focus:bg-white"
           />
           <div className="col-span-2 w-full flex flex-col items-start">
-          <p>Logo</p>
-          <div className="w-20 h-20 relative flex justfiy-center items-start">
-          
-            <Image src={logo} width={100} height={100} alt="logo" className="rounded-md"/>
-          <label htmlFor="file" className="cursor-pointer z-9 text-transparent hover:text-black/[0.8] hover:bg-white/[0.5] transition ease-in-out absolute w-full h-full flex justify-center items-center  ">
-          <AiOutlineFileImage size={48} className=""/>
-            <input type="file" name="logo" className="absolute top-0 z-10 w-full h-full opacity-0 cursor-pointer">
-              
-            </input>
-            </label>
-    
-          </div>
+            <p>Logo</p>
+            <div className="w-20 h-20 relative flex justfiy-center items-start">
+              <Image
+                src={updatedlogo}
+                width={100}
+                height={100}
+                alt="logo"
+                className="rounded-md"
+              />
+              <label
+                htmlFor="file"
+                className="cursor-pointer z-9 
+                text-transparent hover:text-black/[0.8] hover:bg-white/[0.5] 
+                transition ease-in-out absolute 
+                w-full h-full flex justify-center items-center  "
+              >
+                <AiOutlineFileImage size={48} className="" />
+                <input
+                  type="file"
+                  name="logo"
+                  className="absolute top-0 z-10 w-full h-full opacity-0 cursor-pointer"
+                  title="Update Logo"
+                  onChange={handleLogoChange} />
+              </label>
+            </div>
           </div>
           <button
             type="submit"

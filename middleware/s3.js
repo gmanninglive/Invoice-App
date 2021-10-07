@@ -1,5 +1,5 @@
 import { S3 }  from 'aws-sdk'
-import { ObjectId } from 'bson';
+import { v4 as uuidv4 } from 'uuid';
 
 const bucket_name = process.env.NEXT_PUBLIC_BUCKET_NAME;
 const region = process.env.NEXT_PUBLIC_BUCKET_REGION;
@@ -13,12 +13,12 @@ const bucket = new S3({
     signatureVersion: 'v4'
 })
 
-export async function generateUploadURL(){
-    const imageName = new ObjectId();
+export async function generateUploadURL(ext){
+    const imageName = uuidv4();;
 
     const params = ({
         Bucket: bucket_name,
-        Key: imageName.toString(),
+        Key: `${imageName.toString()}${ext}`,
         Expires: 60
     })
     const uploadURL = await bucket.getSignedUrlPromise('putObject', params)
