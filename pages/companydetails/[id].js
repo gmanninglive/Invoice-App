@@ -55,10 +55,10 @@ const CompanyDetails = (props) => {
         method: "PUT",
         headers: {
           "Content-Type": "multipart/form-data",
-          "Content-Disposition": `attachment; filename=${file.name}`,
         },
         body: file,
-      }).then(res => console.log(res));
+      }).then(res => { 
+        console.log(res)});
       
       // Format AWS url
       const imageUrl = url.split("?")[0];
