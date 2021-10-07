@@ -13,7 +13,11 @@ import Header from "components/header/Header";
 // TODO Add s3 delete function when user changes logo
 const CompanyDetails = (props) => {
   const {
-    business_name, add_l1, add_l2, add_l3, add_l4,
+    business_name,
+    add_l1,
+    add_l2,
+    add_l3,
+    add_l4,
     postcode,
     email,
     landline,
@@ -25,73 +29,64 @@ const CompanyDetails = (props) => {
   const router = useRouter();
   const { id } = router.query;
 
-  const [updatedlogo, setlogo] = useState(logo)
+  const [updatedlogo, setlogo] = useState(logo);
 
   // Function to update logo -- Gets signed AWS s3 URL then sends post request with image to URL
   // Then sends put request to update database with URL
-  async function handleLogoChange(e){
+  async function handleLogoChange(e) {
     const file = e.target.files[0];
-    const body = {"ext" :  `.${file.type.slice(6)}`}
     // If new logo file added fetch s3 url and upload
     if (!!file) {
       // Get signed url from s3, valid for 60s
-      const getUrl = axios({
-        method: "POST",
-        url: `/api/business/gets3url`,
-        content: "application/json",
-        data: body,
-      })
-        .then((res) => {
-          return res.data;
-        })
-        .catch((err) => {
-          throw err;
-        });
-
-      const { url } = await getUrl;
-      console.log(url)
-      // Upload put request to s3
-      await fetch( url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-        body: file,
-      }).then(res => { 
-        console.log(res)});
-      
-      // Format AWS url
-      const imageUrl = url.split("?")[0];
-  
-      // Update logo url state to prevent need to refresh page
-      setlogo(imageUrl)
-      
-      // Values for database update query
-      const values = {
-        logo: imageUrl,
-      };
-      
-      // // Append all values for database query
+      const res = await fetch(`/api/business/gets3url?ext=.${file.type.split("/")[1]}`);
+      const { url, fields } = await res.json();
       const formData = new FormData();
-      for (const key in values) {
-        formData.append(key, values[key]);
+      console.log(fields)
+      Object.entries({ ...fields, file }).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      console.log(url);
+      // Upload put request to s3
+      const upload = await fetch(url, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (upload.ok) {
+        console.log("Uploaded successfully!");
+      } else {
+        console.error("Upload failed.");
       }
-      // Axios PUT request to Mongodb on business details route
-      axios({
-        method: "PUT",
-        url: `/api/business/${id}/logo`,
-        data: formData,
-        config: {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        },
-      })
-        .catch((err) => {
-          console.log(err);
-        });
+    
+
+    // Format AWS url
+    const imageUrl = `https://vie-invoice-app.s3.eu-west-2.amazonaws.com/${fields.key}`;
+
+    // Update logo url state to prevent need to refresh page
+    setlogo(imageUrl);
+      console.log(imageUrl)
+    // Values for database update query
+    const values = {
+      logo: imageUrl,
+    };
+
+    // // Append all values for database query
+    const dbFormData = new FormData();
+    for (const key in values) {
+      dbFormData.append(key, values[key]);
     }
+    // Axios PUT request to Mongodb on business details route
+    axios({
+      method: "PUT",
+      url: `/api/business/${id}/logo`,
+      data: dbFormData,
+    }).catch((err) => {
+      console.log(err);
+    });
   }
+}
+
   // Handle submit of text form fields
   async function handleSubmit(e) {
     e.preventDefault();
@@ -109,7 +104,7 @@ const CompanyDetails = (props) => {
       ltd_no: e.target.ltd_no.value,
       logo: updatedlogo,
     };
-    
+
     // // Append all values for database query
     const formData = new FormData();
     for (const key in values) {
@@ -286,7 +281,8 @@ const CompanyDetails = (props) => {
                   name="logo"
                   className="absolute top-0 z-10 w-full h-full opacity-0 cursor-pointer"
                   title="Update Logo"
-                  onChange={handleLogoChange} />
+                  onChange={handleLogoChange}
+                />
               </label>
             </div>
           </div>
