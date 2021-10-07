@@ -3,6 +3,7 @@ import { useState } from "react";
 import { ObjectId } from "bson";
 import Image from "next/image";
 import axios from "axios";
+
 import { AiOutlineFileImage } from "react-icons/ai";
 import { connectToDatabase } from "db/mongodb";
 import Header from "components/header/Header";
@@ -58,11 +59,13 @@ const CompanyDetails = (props) => {
       });
       // Format AWS url
       const imageUrl = url.split("?")[0];
-      console.log(imageUrl)
+  
+      // Update logo url state to prevent need to refresh page
       setlogo(imageUrl)
       
+      // Values for database update query
       const values = {
-        logo: file,
+        logo: imageUrl,
       };
       
       // // Append all values for database query
@@ -73,7 +76,7 @@ const CompanyDetails = (props) => {
       // Axios PUT request to Mongodb on business ID route
       axios({
         method: "PUT",
-        url: `/api/business/${id}/logo`,
+        url: `/api/business/${id}`,
         data: formData,
         config: {
           headers: {
@@ -111,7 +114,7 @@ const CompanyDetails = (props) => {
     // Axios PUT request to Mongodb on business ID route
     axios({
       method: "PUT",
-      url: `/api/business/${id}/logo`,
+      url: `/api/business/${id}`,
       data: formData,
       config: {
         headers: {
